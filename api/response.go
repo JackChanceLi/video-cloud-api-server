@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"go-micro-server/api/defs"
+	"go-api-server/api/defs"
 	"io"
 	"net/http"
 )

@@ -1,9 +1,9 @@
 package session
 //专门产生session的方法，为用户分配session，检测用户的session是否过期
 import (
-	"go-micro-server/api/dbop"
-	"go-micro-server/api/defs"
-	"go-micro-server/api/utils"
+	"go-api-server/api/dbop"
+	"go-api-server/api/defs"
+	"go-api-server/api/utils"
 	"sync"
 	"time"
 )

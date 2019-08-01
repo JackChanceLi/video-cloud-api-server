@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"go-micro-server/api/defs"
+	"go-api-server/api/defs"
 	"io/ioutil"
 	"net/http"
 	"testing"

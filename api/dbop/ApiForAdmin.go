@@ -2,7 +2,7 @@ package dbop
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"go-micro-server/api/defs"
+	"go-api-server/api/defs"
 	"log"
 )
 
