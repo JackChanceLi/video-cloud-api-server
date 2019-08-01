@@ -82,6 +82,34 @@ type LiveRoomIdentity struct {
 }
 
 
+type Resourse struct {
+	Code  int `json:"code"`
+	Data  DataForResourse `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+type ResourseList struct {
+	Code int `json:"code"`
+	Data [] ResourseIdentity `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+
+type DataForResourse struct {
+	ResourseInfo ResourseIdentity `json:"resourse"`
+}
+
+type ResourseIdentity struct {
+	Rid string `json:"rid"`
+	Aid string `json:"aid"`
+	Cid string `json:"cid"`
+	Name string  `json:"name"`
+	Rtype string `json:"rtype"`
+	Size float64 `json:"size"`
+	Label string `json:"label"`
+	Time string `json:"time"`
+}
+
 var (
 	EmptyUser = UserInformation{Cid:"", Name:"", Email:"", Auth:""}
 	//EmptySignedUp = SignedUp{Success:false, SessionId:"", Cid:"", Name:"", Email:"", Auth:""}

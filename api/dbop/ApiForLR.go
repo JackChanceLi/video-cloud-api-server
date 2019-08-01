@@ -71,7 +71,7 @@ func DeleteLiveRoom(lid string) error {
 	return nil
 }
 
-func UpdateLiveRoom(aid string, lid string, name string, kind int, size int, start_time string, end_time string, permission string) (*defs.LiveRoomIdentity, error) {
+func UpdateLiveRoom( lid string, name string, kind int, size int, start_time string, end_time string, permission string) (*defs.LiveRoomIdentity, error) {
 	stmtUpa, err := dbConn.Prepare("UPDATE live_room SET name = ?, kind = ?, size = ?, start_time = ?, end_time = ?, permission = ? WHERE lid = ?")
 	if err != nil {
 		log.Printf("%s",err)
@@ -92,7 +92,7 @@ func UpdateLiveRoom(aid string, lid string, name string, kind int, size int, sta
 	}
 
 	room := &defs.LiveRoomIdentity{}
-	room.Aid = aid
+	room.Aid = Lr.Aid
 	room.Lid = lid
 	room.Cid = Lr.Cid
 	room.Name = name
