@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"net/http"
 	"os"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
 )
 
 func createBucket(endpoint, accessKeyId, accessKeySecret, bucketName string) {
@@ -36,6 +38,7 @@ func uploadFile(endpoint, accessKeyId, accessKeySecret, bucketName, objectName, 
 		os.Exit(-1)
 	}
 
+
 	// 上传本地文件。
 	err = bucket.PutObjectFromFile(objectName, fileName)
 	if err != nil {
@@ -43,4 +46,8 @@ func uploadFile(endpoint, accessKeyId, accessKeySecret, bucketName, objectName, 
 		os.Exit(-1)
 	}
 	fmt.Println("Upload success")
+}
+
+func getAssumeRole(endpoint, accessKeyId, accessKeySecret, bucketName, objectName, fileName string) {
+
 }

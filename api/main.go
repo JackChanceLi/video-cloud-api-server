@@ -33,6 +33,7 @@ func handler () *httprouter.Router {
 	router.GET("/com/:cid/liverooms/", GetLiveRooms)
 	router.DELETE("/com/:cid/liverooms/",DeleteLiveRoom)
 	router.GET ("/com/:cid/liveroom/", GetLiveRoomByLid)
+	router.OPTIONS("/", NormalHandler)
 
 	return router
 }

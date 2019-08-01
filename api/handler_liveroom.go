@@ -27,7 +27,6 @@ func CreateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 		return
 	}
 	fmt.Println(ubody)
-	w.Header().Set("Access-Control-Allow-Origin","*")  //"*"表示接受任意域名的请求，这个值也可以根据自己需要，设置成不同域名
 	if cid == ubody.Aid {  //表示创建者为超级管理员
 		room, err := dbop.CreateLiveRoomByCom(cid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime)
 		if  err != nil {
@@ -108,7 +107,6 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	}
 	ubody := &defs.LiveRoomIdentity{}
 
-	w.Header().Set("Access-Control-Allow-Origin","*")  //"*"表示接受任意域名的请求，这个值也可以根据自己需要，设置成不同域名
 	//解析包
 	if err := json.Unmarshal(res, ubody); err != nil {
 		fmt.Println(ubody)
@@ -187,7 +185,6 @@ func GetLiveRooms(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 	vars := r.URL.Query()
 	aid := vars.Get("aid")
 
-	w.Header().Set("Access-Control-Allow-Origin","*")  //"*"表示接受任意域名的请求，这个值也可以根据自己需要，设置成不同域名
 
 	if aid == cid {
 		room, err := dbop.RetrieveLiveRoomByCid(cid)
@@ -216,7 +213,6 @@ func DeleteLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	log.Printf("Aid value is [%s]\n", aid)
 	log.Printf("Lid value is [%s]\n", lid)
 
-	w.Header().Set("Access-Control-Allow-Origin","*")  //"*"表示接受任意域名的请求，这个值也可以根据自己需要，设置成不同域名
 	err := dbop.DeleteLiveRoom(lid)
 	if err != nil {
 		sendErrorResponse(w, defs.ErrorDBError)
@@ -237,8 +233,6 @@ func GetLiveRoomByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	vars := r.URL.Query()
 	lid := vars.Get("lid")
 	aid := vars.Get("aid")
-
-	w.Header().Set("Access-Control-Allow-Origin","*")  //"*"表示接受任意域名的请求，这个值也可以根据自己需要，设置成不同域名
 
 	room, err := dbop.RetrieveLiveRoomByLid(lid)
 	if err != nil {
@@ -280,4 +274,15 @@ func GetLiveRoomByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 		sendNormalResponse(w, string(resp), 200)
 	}
 
+}
+
+func NormalHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	fmt.Println("OPTIONS WORK")
+	su := ""
+	if resp, err := json.Marshal(su); err != nil {
+		sendErrorResponse(w, defs.ErrorInternalFaults)
+		return
+	} else {
+		sendNormalResponse(w, string(resp), 200)
+	}
 }
