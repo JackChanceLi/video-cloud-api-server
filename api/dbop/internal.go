@@ -2,7 +2,7 @@ package dbop
 
 import (
 	"database/sql"
-	"go-micro-server/api/defs"
+	"go-api-server/api/defs"
 	"log"
 	"strconv"
 	"sync"

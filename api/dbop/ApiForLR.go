@@ -3,8 +3,8 @@ package dbop
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-	"go-micro-server/api/defs"
-	"go-micro-server/api/utils"
+	"go-api-server/api/defs"
+	"go-api-server/api/utils"
 	"log"
 	"sync"
 )

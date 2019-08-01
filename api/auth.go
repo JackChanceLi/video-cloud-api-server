@@ -1,8 +1,8 @@
 package main
 
 import (
-	"go-micro-server/api/defs"
-	"go-micro-server/api/session"
+	"go-api-server/api/defs"
+	"go-api-server/api/session"
 	"net/http"
 )
 
