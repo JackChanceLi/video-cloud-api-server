@@ -31,8 +31,15 @@ func handler () *httprouter.Router {
 	router.POST("/com/:cid/liverooms/", CreateLiveRoom)
 	router.PUT("/com/:cid/liverooms/", UpdateLiveRoom)
 	router.GET("/com/:cid/liverooms/", GetLiveRooms)
-	router.DELETE("/com/:cid/liverooms/",DeleteLiveRoom)
+	router.DELETE("/com/:cid/liverooms/", DeleteLiveRoom)
 	router.GET ("/com/:cid/liveroom/", GetLiveRoomByLid)
+
+	router.POST("/com/:cid/resourses/", UploadResourse)
+	router.PUT("/com/:cid/resourses/", UpdateResourse)
+	router.GET("/com/:cid/resourses/", GetResourses)
+	router.DELETE("/com/:cid/resourses/", DeleteResourse)
+	router.GET ("/com/:cid/resourse/", GetResourseByRid)
+
 	router.OPTIONS("/", NormalHandler)
 
 	return router

@@ -71,7 +71,7 @@ func DeleteLiveRoom(lid string) error {
 	return nil
 }
 
-func UpdateLiveRoom( lid string, name string, kind int, size int, start_time string, end_time string, permission string) (*defs.LiveRoomIdentity, error) {
+func UpdateLiveRoom(lid string, name string, kind int, size int, start_time string, end_time string, permission string) (*defs.LiveRoomIdentity, error) {
 	stmtUpa, err := dbConn.Prepare("UPDATE live_room SET name = ?, kind = ?, size = ?, start_time = ?, end_time = ?, permission = ? WHERE lid = ?")
 	if err != nil {
 		log.Printf("%s",err)
@@ -161,6 +161,7 @@ func RetrieveLiveRoomByLid(Lid string) (*defs.LiveRoomIdentity, error) {//通过
 	defer stmtOut.Close()
 	return Lri, nil
 }
+
 func CreateLiveRoomByAdmin (cid, aid, name, startTime, endTime string, kind, size int) (*defs.LiveRoomIdentity, error ) {
 	createTime, _ := getCurrentTime()
 	permission := "logged_user"
@@ -246,4 +247,23 @@ func RetrieveLiveRoomByCid(Cid string) ([] defs.LiveRoomIdentity, error) {  //�
 	return room, nil
 }
 
+func SearchAuth(aid string, lid string) (bool, error) { //在UToL表中寻找是否有更新权限
+	stmtOut, err := dbConn.Prepare("SELECT * FROM UToL WHERE aid = ? and lid = ?")
+	if err != nil {
+		log.Printf("%s", err)
+		return false, err
+	}
 
+	var naid, nlid string
+	stmtOut.QueryRow(aid, lid).Scan(&naid, &nlid)
+	if err != nil {
+		log.Printf("%s", err)
+		return false, err
+	}
+
+	if naid == "" && nlid == "" {
+		log.Printf("No rows")
+		return false,nil
+	}
+	 return true, nil
+}
