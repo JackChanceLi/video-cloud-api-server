@@ -12,3 +12,15 @@ func TestNewUUID(t *testing.T) {
 	}
 	fmt.Printf("New id is: %s\n",uid)
 }
+
+func TestNewID(t *testing.T) {
+	id := NewID()
+	t.Log("Xid:" + id)
+}
+
+func TestNewStreamID(t *testing.T) {
+	for i:= 1; i < 50; i++ {
+		id, _:= NewStreamID()
+		t.Log("Stream_id:" + id)
+	}
+}

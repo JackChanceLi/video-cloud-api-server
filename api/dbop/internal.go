@@ -108,3 +108,22 @@ func DeleteSessionByName(Uid string) error {
 	defer stmtOut.Close()
 	return nil
 }
+
+func UpdateSession(ttl int64,  uid string) error {  //更新session
+	ttlStr := strconv.FormatInt(ttl,10)
+	stmtUpa, err := dbConn.Prepare("UPDATE sessions SET ttl = ? WHERE uid = ?")
+	if err != nil {
+		log.Printf("%s",err)
+		return err
+	}
+
+	_,err = stmtUpa.Exec(ttlStr, uid)
+	if err != nil {
+		return err
+	}
+
+	log.Printf(" Update success")
+
+	defer stmtUpa.Close()
+	return nil
+}
