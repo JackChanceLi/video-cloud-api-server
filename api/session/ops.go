@@ -62,3 +62,11 @@ func IsSessionExpired(sid string) (string, bool) {
 	}
 	return "", true
 }
+
+func UpdateSession(un string) {
+	ct := time.Now().UnixNano()/1000000   //生成ms级别的时间
+	ttl := ct + 30 * 60 * 1000  //设置用户session的有效期为30分钟
+	ss := &defs.Session{Uid:un, TTL:ttl}
+	sessionMap.Store(un, ss)
+	dbop.UpdateSession(ttl, un)
+}

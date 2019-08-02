@@ -6,12 +6,18 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"go-api-server/api/dbop"
 	"go-api-server/api/defs"
+	"go-api-server/api/session"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
 func CreateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	ok := validateUserSession(r)
+	if !ok {
+		sendErrorResponse(w, defs.ErrorNotAuthUser)
+		return
+	}
 	cid := ps.ByName("cid")
 	res, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -93,9 +99,15 @@ func CreateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 			sendNormalResponse(w, string(resp),200)
 		}
 	}
+	defer session.UpdateSession(ubody.Aid)
 }
 
 func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {//更新直播间信息
+	ok := validateUserSession(r)
+	if !ok {
+		sendErrorResponse(w, defs.ErrorNotAuthUser)
+		return
+	}
 	cid := ps.ByName("cid")//获取cid
 	au := r.URL.Query()
 	aid := au.Get("aid")//获取aid
@@ -189,9 +201,15 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 			sendNormalResponse(w, string(resp), 200)
 		}
 	}
+	defer session.UpdateSession(ubody.Aid)
 }
 
 func GetLiveRooms(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	ok := validateUserSession(r)
+	if !ok {
+		sendErrorResponse(w, defs.ErrorNotAuthUser)
+		return
+	}
 	cid := ps.ByName("cid")
 	vars := r.URL.Query()
 	aid := vars.Get("aid")
@@ -214,9 +232,15 @@ func GetLiveRooms(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 			sendNormalResponse(w, string(resp),200)
 		}
 	}
+	defer session.UpdateSession(aid)
 }
 
 func DeleteLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	ok := validateUserSession(r)
+	if !ok {
+		sendErrorResponse(w, defs.ErrorNotAuthUser)
+		return
+	}
 	//cid := ps.ByName("cid")//获取cid
 	au := r.URL.Query()
 	aid := au.Get("aid")//获取aid
@@ -237,9 +261,15 @@ func DeleteLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	} else {
 		sendNormalResponse(w, string(resp),200)
 	}
+	defer session.UpdateSession(aid)
 }
 
 func GetLiveRoomByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	ok := validateUserSession(r)
+	if !ok {
+		sendErrorResponse(w, defs.ErrorNotAuthUser)
+		return
+	}
 	cid := ps.ByName("cid")
 	vars := r.URL.Query()
 	lid := vars.Get("lid")
@@ -284,12 +314,14 @@ func GetLiveRoomByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	} else {
 		sendNormalResponse(w, string(resp), 200)
 	}
-
+	defer session.UpdateSession(aid)
 }
 
 func NormalHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Println("OPTIONS WORK")
 	su := ""
+	sid := r.Header.Get(HEADER_FILED_SESSION)
+	w.Header().Set("Access-Control-Request-Headers", sid)
 	if resp, err := json.Marshal(su); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)
 		return

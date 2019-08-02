@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"go-api-server/api/defs"
 	"go-api-server/api/utils"
+	"go-api-server/api/url"
 	"log"
 	"sync"
 )
@@ -20,11 +21,11 @@ func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime 
 	}
 
 	lid, _ := utils.NewUUID()
-	pushUrl := "www.baidu.com"
-	pullHlsUrl := "www.11111.com"
-	pullRtmpUrl := "www.22222.com"
-	pullHttpFlvUrl := "www.33333.com"
-	displayUrl := "www.44444.com"
+	pushUrl,_ := url.NewRtmpUrl()
+	pullHlsUrl,_ := url.NewHlsUrl()
+	pullRtmpUrl,_ := url.NewRtmpUrl()
+	pullHttpFlvUrl,_ := url.NewFlvUrl()
+	displayUrl,_ := url.NewDisplayUrl()
 
 	_,err = stmtIns.Exec(lid, cid, name, kind, size, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, status, permission, createTime)
 	if err != nil {
