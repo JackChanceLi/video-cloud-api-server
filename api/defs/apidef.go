@@ -94,7 +94,6 @@ type ResourseList struct {
 	Msg Message `json:"msg"`
 }
 
-
 type DataForResourse struct {
 	ResourseInfo ResourseIdentity `json:"resourse"`
 }

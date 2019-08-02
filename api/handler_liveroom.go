@@ -115,8 +115,8 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	}
 	fmt.Println(ubody)
 
-	if cid == ubody.Aid { //表示更新者为超级管理员
-		room, err := dbop.UpdateLiveRoom(aid, ubody.Lid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime, ubody.Permission)
+	if cid == aid { //表示更新者为超级管理员
+		room, err := dbop.UpdateLiveRoom(ubody.Lid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime, ubody.Permission)
 		if err != nil {
 			sendErrorResponse(w, defs.ErrorDBError)
 			return
@@ -147,7 +147,18 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 			sendNormalResponse(w, string(resp), 200)
 		}
 	} else {  //表示更新者为普通管理员
-		room, err := dbop.UpdateLiveRoom(aid, ubody.Lid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime, ubody.Permission)
+		var bl bool
+		bl, err := dbop.SearchAuth(aid, ubody.Lid)
+		if err != nil {
+			sendErrorResponse(w, defs.ErrorDBError)
+			return
+		}
+		if bl == false {
+			sendErrorResponse(w, defs.ErrorNotAuthUserForRoom)
+			return
+		}
+
+		room, err := dbop.UpdateLiveRoom(ubody.Lid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime, ubody.Permission)
 		if err != nil {
 			sendErrorResponse(w, defs.ErrorDBError)
 			return
