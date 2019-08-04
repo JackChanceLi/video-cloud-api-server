@@ -126,8 +126,6 @@ func CrteateLiveRoom(w http.ResponseWriter, r *http.Request, _ httprouter.Params
 	}
 }
 
-
-func test(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
-
+func Handler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	fmt.Fprintf(w, "URL.Path = %q\n", r.URL.Path)
 }
