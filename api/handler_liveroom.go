@@ -317,7 +317,7 @@ func GetLiveRoomByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	defer session.UpdateSession(aid)
 }
 
-func NormalHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func NormalHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("OPTIONS WORK")
 	su := ""
 	sid := r.Header.Get(HEADER_FILED_SESSION)

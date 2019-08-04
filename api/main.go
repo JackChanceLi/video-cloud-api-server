@@ -17,11 +17,16 @@ func NewMiddleWareHandler(r *httprouter.Router) http.Handler {
 }
 
 func (m middleWareHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		NormalHandler(w, r)
+		return
+	}
 	m.r.ServeHTTP(w, r)
 }
 
 func handler () *httprouter.Router {
 	router := httprouter.New()
+
 	//普通用户管理
 	router.POST("/user/register", Register)
 	router.POST("/user/login",LoginByMail)
@@ -56,14 +61,13 @@ func handler () *httprouter.Router {
 	//版本安全设置管理
 
 
+	//router.OPTIONS("/", NormalHandler)
 
 	//权限安全设置管理
 	router.POST("/com/:cid/liveroom/auth_safe/", InsertLRAuthSafe)
 	router.PUT("/com/:cid/liveroom/auth_safe/", UpdateLRAuthSafe)
 	router.GET("/com/:cid/liveroom/auth_safe_black/", GetLRAuthSafeBlackListByLid)
 	router.GET("/com/:cid/liveroom/auth_safe_white/", GetLRAuthSafeWhiteListByLid)
-	//OPTIONS操作
-	router.OPTIONS("/", NormalHandler)
 
 	return router
 }
@@ -73,6 +77,7 @@ func main() {
 	mh := NewMiddleWareHandler(r)
 	log.Printf("Server start1\n")
 	http.ListenAndServe(":9000",mh)
-
 }
+
+
 
