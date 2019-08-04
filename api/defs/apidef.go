@@ -44,7 +44,7 @@ type Session struct{
 	Uid string  //session对用的用户名
 	TTL      int64  //session的有效期
 }
-
+//直播间
 type LiveRoom struct {
 	Code  int `json:"code"`
 	Data  DataForLiveRoom `json:"data"`
@@ -56,7 +56,6 @@ type LiveRoomList struct {
 	Data [] LiveRoomIdentity `json:"data"`
 	Msg Message `json:"msg"`
 }
-
 
 type DataForLiveRoom struct {
 	LiveRoomInfo LiveRoomIdentity `json:"live_room"`
@@ -81,7 +80,7 @@ type LiveRoomIdentity struct {
 	CreateTime string `json:"create_time"`
 }
 
-
+//文件资源
 type Resourse struct {
 	Code  int `json:"code"`
 	Data  DataForResourse `json:"data"`
@@ -108,6 +107,71 @@ type ResourseIdentity struct {
 	Label string `json:"label"`
 	Time string `json:"time"`
 }
+
+//引导界面信息
+type LiveRoomIntro struct {
+	Code  int `json:"code"`
+	Data  DataForLiveRoomIntro `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+type DataForLiveRoomIntro struct {
+	LiveRoomIntroInfo LiveRoomIntroIdentity `json:"live_room_intro"`
+}
+
+type LiveRoomIntroIdentity struct {
+	Lid string `json:"lid"`
+	Qorder int `json:"qorder"`
+	Prepic string `json:"pre_pic"`
+}
+
+//直播界面信息
+type LiveRoomConfig struct {
+	Code  int `json:"code"`
+	Data  DataForLiveRoomConfig `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+type DataForLiveRoomConfig struct {
+	LiveRoomConfigInfo LiveRoomConfigIdentity `json:"live_room_config_info"`
+}
+
+type LiveRoomConfigIdentity struct {
+	Lid string `json:"lid"`
+	LivePic string `json:"live_pic"`
+	Danmu int `json:"danmu"`
+	Chat int `json:"chat"`
+	Share int `json:"share"`
+	ShareText string `json:"share_text"`
+	Advertisement int `json:"advertisement"`
+	AdJumpUrl string `json:"ad_jump_url"`
+	AdPicUrl string `json:"ad_pic_url"`
+	AdText string `json:"ad_text"`
+}
+
+//权限安全设置
+type LiveRoomAuthSafe struct {
+	Code  int `json:"code"`
+	Data  DataForLiveRoomAuthSafe `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+type LiveRoomAuthSafeList struct {
+	Code int `json:"code"`
+	Data [] LiveRoomAuthSafeIdentity `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+type DataForLiveRoomAuthSafe struct {
+	LiveRoomAuthSafeInfo LiveRoomAuthSafeIdentity `json:"live_room_config_info"`
+}
+
+type LiveRoomAuthSafeIdentity struct {
+	Lid string `json:"lid"`
+	Website string `json:"website"`
+	Wtype int `json:"wtype"`
+}
+
 
 var (
 	EmptyUser = UserInformation{Cid:"", Name:"", Email:"", Auth:""}
