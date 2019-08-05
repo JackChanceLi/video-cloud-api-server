@@ -114,7 +114,7 @@ func CrteateLiveRoom(w http.ResponseWriter, r *http.Request, _ httprouter.Params
 	liveInfo.Data.LiveRoomInfo.PullHttpFlvUrl = "www.hlv.com"
 	liveInfo.Data.LiveRoomInfo.DisplayUrl = "www.display.com"
 	liveInfo.Data.LiveRoomInfo.Status = 5
-	liveInfo.Data.LiveRoomInfo.Permission = "Auth users"
+	liveInfo.Data.LiveRoomInfo.Permission = 1
 	liveInfo.Msg.ErrorCode = ""
 	liveInfo.Msg.Error = ""
 
