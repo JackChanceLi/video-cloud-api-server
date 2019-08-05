@@ -103,11 +103,11 @@ func CreateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 }
 
 func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {//更新直播间信息
-	ok := validateUserSession(r)
-	if !ok {
-		sendErrorResponse(w, defs.ErrorNotAuthUser)
-		return
-	}
+	//ok := validateUserSession(r)
+	//if !ok {
+	//	sendErrorResponse(w, defs.ErrorNotAuthUser)
+	//	return
+	//}
 	cid := ps.ByName("cid")//获取cid
 	au := r.URL.Query()
 	aid := au.Get("aid")//获取aid
@@ -135,7 +135,7 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 		}
 		roomInfo := &defs.LiveRoom{}
 		roomInfo.Code = 200
-		roomInfo.Data.LiveRoomInfo.Aid = room.Aid
+		roomInfo.Data.LiveRoomInfo.Aid = aid
 		roomInfo.Data.LiveRoomInfo.Lid = room.Lid
 		roomInfo.Data.LiveRoomInfo.Cid = room.Cid
 		roomInfo.Data.LiveRoomInfo.Name = room.Name
@@ -177,7 +177,7 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 		}
 		roomInfo := &defs.LiveRoom{}
 		roomInfo.Code = 200
-		roomInfo.Data.LiveRoomInfo.Aid = room.Aid
+		roomInfo.Data.LiveRoomInfo.Aid = aid
 		roomInfo.Data.LiveRoomInfo.Lid = room.Lid
 		roomInfo.Data.LiveRoomInfo.Cid = room.Cid
 		roomInfo.Data.LiveRoomInfo.Name = room.Name
@@ -201,7 +201,7 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 			sendNormalResponse(w, string(resp), 200)
 		}
 	}
-	defer session.UpdateSession(ubody.Aid)
+	//defer session.UpdateSession(ubody.Aid)
 }
 
 func GetLiveRooms(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

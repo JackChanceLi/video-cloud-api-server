@@ -13,7 +13,7 @@ import (
 func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime string, endTime string) (*defs.LiveRoomIdentity, error ){ //超级管理员创建用户
 
 	createTime, _ := getCurrentTime()
-	permission := "logged_user"
+	permission := 1
 	status := 2
 	stmtIns, err := dbConn.Prepare("INSERT INTO live_room (lid, cid, name, kind, size, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, status, permission, create_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
@@ -72,7 +72,7 @@ func DeleteLiveRoom(lid string) error {
 	return nil
 }
 
-func UpdateLiveRoom(lid string, name string, kind int, size int, start_time string, end_time string, permission string) (*defs.LiveRoomIdentity, error) {
+func UpdateLiveRoom(lid string, name string, kind int, size int, start_time string, end_time string, permission int) (*defs.LiveRoomIdentity, error) {
 	stmtUpa, err := dbConn.Prepare("UPDATE live_room SET name = ?, kind = ?, size = ?, start_time = ?, end_time = ?, permission = ? WHERE lid = ?")
 	if err != nil {
 		log.Printf("%s",err)
@@ -128,8 +128,8 @@ func SearchLiveRoomByCid(Cid string) (*sync.Map, int, error) {
 	}
 
 	for rows.Next() {
-		var aid,lid, cid, name, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, permission, create_time string
-		var kind, size, status int
+		var aid,lid, cid, name, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, create_time string
+		var kind, size, status, permission int
 		if er := rows.Scan(&aid, &lid, &cid, &name, &kind, &size, &start_time, &end_time, &push_url, &pull_hls_url, &pull_rtmp_url, &pull_http_flv_url, &display_url, &status, &permission, &create_time); er != nil {
 			log.Printf("Retrieve live_room error: %s", er)
 			break
@@ -150,8 +150,8 @@ func RetrieveLiveRoomByLid(Lid string) (*defs.LiveRoomIdentity, error) {//通过
 		log.Printf("%s", err)
 		return nil, err
 	}
-	var  cid, name, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, permission, create_time string
-	var kind, size, status int
+	var  cid, name, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, create_time string
+	var kind, size, status, permission int
 	stmtOut.QueryRow(Lid).Scan(&cid, &name, &kind, &size, &start_time, &end_time, &push_url, &pull_hls_url, &pull_rtmp_url, &pull_http_flv_url, &display_url, &status, &permission, &create_time)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
@@ -165,7 +165,7 @@ func RetrieveLiveRoomByLid(Lid string) (*defs.LiveRoomIdentity, error) {//通过
 
 func CreateLiveRoomByAdmin (cid, aid, name, startTime, endTime string, kind, size int) (*defs.LiveRoomIdentity, error ) {
 	createTime, _ := getCurrentTime()
-	permission := "logged_user"
+	permission := 1
 	status := 2
 	stmtIns, err := dbConn.Prepare("INSERT INTO live_room (lid, cid, name, kind, size, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, status, permission, create_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
@@ -232,8 +232,8 @@ func RetrieveLiveRoomByCid(Cid string) ([] defs.LiveRoomIdentity, error) {  //�
 	}
 
 	for rows.Next() {
-		var lid, cid, name, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, permission, createTime string
-		var kind, size, status int
+		var lid, cid, name, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, createTime string
+		var kind, size, status, permission int
 		if er := rows.Scan(&lid, &cid, &name, &kind, &size, &startTime, &endTime, &pushUrl, &pullHlsUrl, &pullRtmpUrl, &pullHttpFlvUrl, &displayUrl, &status, &permission, &createTime); er != nil {
 			log.Printf("Retrieve live_room error: %s", er)
 			return nil, err

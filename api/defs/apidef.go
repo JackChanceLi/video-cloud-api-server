@@ -76,7 +76,7 @@ type LiveRoomIdentity struct {
 	PullHttpFlvUrl string `json:"pull_http_flv_url"`
 	DisplayUrl string `json:"display_url"`
 	Status int `json:"status"`
-	Permission string `json:"permission"`
+	Permission int `json:"permission"`
 	CreateTime string `json:"create_time"`
 }
 
@@ -223,6 +223,7 @@ type LiveRoomQualityIdentity struct {
 	Record int `json:"record"`
 	RecordType int `json:"record_type"`
 }
+
 
 
 var (

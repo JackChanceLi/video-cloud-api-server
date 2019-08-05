@@ -71,10 +71,9 @@ func testRecieveToken(t *testing.T) {
 	defer resp.Body.Close()
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Read failed:", err)
+		t.Errorf("Read failed:%v", err)
 		return
 	}
-
 	fmt.Println( resp.Body)
 	fmt.Println("content:", string(content))
 }
