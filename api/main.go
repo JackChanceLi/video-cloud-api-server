@@ -55,14 +55,13 @@ func handler () *httprouter.Router {
 
 
 	//服务设置管理
-
-
-
+	router.POST("/com/:cid/liveroom/quality/", InsertLRQuality)
+	router.PUT("/com/:cid/liveroom/quality/", UpdateLRQuality)
+	router.GET("/com/:cid/liveroom/quality/", GetLRQualityByLid)
 	//版本安全设置管理
-
-
-	//router.OPTIONS("/", NormalHandler)
-
+	router.POST("/com/:cid/liveroom/safe/", InsertLRSafe)
+	router.PUT("/com/:cid/liveroom/safe/", UpdateLRSafe)
+	router.GET("/com/:cid/liveroom/safe/", GetLRSafeByLid)
 	//权限安全设置管理
 	router.POST("/com/:cid/liveroom/auth_safe/", InsertLRAuthSafe)
 	router.PUT("/com/:cid/liveroom/auth_safe/", UpdateLRAuthSafe)

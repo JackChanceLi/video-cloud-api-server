@@ -180,6 +180,50 @@ type LiveRoomAuthSafeIdentity struct {
 	Wtype int `json:"wtype"`
 }
 
+//版本安全设置
+type LiveRoomSafe struct {
+	Code  int `json:"code"`
+	Data  DataForLiveRoomSafe `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+type DataForLiveRoomSafe struct {
+	LiveRoomSafeInfo LiveRoomSafeIdentity `json:"live_room_safe_info"`
+}
+
+type LiveRoomSafeIdentity struct {
+	Lid string `json:"lid"`
+	Logo int `json:"logo"`
+	LogoUrl string `json:"logo_url"`
+	LogoPosition int `json:"logo_position"`
+	LogoTransparency int `json:"logo_transparency"`
+	Lamp int `json:"lamp"`
+	LampType int `json:"lamp_type"`
+	LampText string `json:"lamp_text"`
+	LampFontSize int `json:"lamp_font_size"`
+	LampTransparency int `json:"lamp_transparency"`
+}
+
+//直播间服务设置
+type LiveRoomQuality struct {
+	Code  int `json:"code"`
+	Data  DataForLiveRoomQuality `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+type DataForLiveRoomQuality struct {
+	LiveRoomQualityInfo LiveRoomQualityIdentity `json:"live_room_quality_info"`
+}
+
+type LiveRoomQualityIdentity struct {
+	Lid string `json:"lid"`
+	Delay int `json:"delay"`
+	Transcode int `json:"transcode"`
+	TranscodeType int `json:"transcode_type"`
+	Record int `json:"record"`
+	RecordType int `json:"record_type"`
+}
+
 
 var (
 	EmptyUser = UserInformation{Cid:"", Name:"", Email:"", Auth:""}
