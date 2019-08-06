@@ -15,7 +15,9 @@ func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime 
 	createTime, _ := getCurrentTime()
 	permission := 1
 	status := 2
-	stmtIns, err := dbConn.Prepare("INSERT INTO live_room (lid, cid, name, kind, size, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, status, permission, create_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	pictureUrl := "http://pic-cloud-bupt.oss-cn-beijing.aliyuncs.com/%E7%BE%8E%E5%9B%BD%E5%BE%80%E4%BA%8B.jpg"
+
+	stmtIns, err := dbConn.Prepare("INSERT INTO live_room (lid, cid, name, kind, size, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, status, permission, create_time, picture_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +29,7 @@ func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime 
 	pullHttpFlvUrl,_ := url.NewFlvUrl()
 	displayUrl,_ := url.NewDisplayUrl()
 
-	_,err = stmtIns.Exec(lid, cid, name, kind, size, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, status, permission, createTime)
+	_,err = stmtIns.Exec(lid, cid, name, kind, size, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, status, permission, createTime, pictureUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -51,6 +53,7 @@ func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime 
 	room.Status = status
 	room.Permission = permission
 	room.CreateTime = createTime
+	room.PictureUrl = pictureUrl
 
 	return  room, nil
 }
@@ -72,14 +75,14 @@ func DeleteLiveRoom(lid string) error {
 	return nil
 }
 
-func UpdateLiveRoom(lid string, name string, kind int, size int, start_time string, end_time string, permission int) (*defs.LiveRoomIdentity, error) {
-	stmtUpa, err := dbConn.Prepare("UPDATE live_room SET name = ?, kind = ?, size = ?, start_time = ?, end_time = ?, permission = ? WHERE lid = ?")
+func UpdateLiveRoom(lid string, name string, kind int, size int, startTime string, endTime, pictureUrl string, permission int) (*defs.LiveRoomIdentity, error) {
+	stmtUpa, err := dbConn.Prepare("UPDATE live_room SET name = ?, kind = ?, size = ?, start_time = ?, end_time = ?, permission = ?, picture_url = ? WHERE lid = ?")
 	if err != nil {
 		log.Printf("%s",err)
 		return nil, err
 	}
 
-	_,err = stmtUpa.Exec(name, kind, size, start_time, end_time, permission, lid)
+	_,err = stmtUpa.Exec(name, kind, size, startTime, endTime, permission, pictureUrl, lid)
 	if err != nil {
 		return nil, err
 	}
@@ -109,6 +112,7 @@ func UpdateLiveRoom(lid string, name string, kind int, size int, start_time stri
 	room.Status = Lr.Status
 	room.Permission = permission
 	room.CreateTime = Lr.CreateTime
+	room.PictureUrl = pictureUrl
 	return room, nil
 }
 
@@ -173,11 +177,11 @@ func CreateLiveRoomByAdmin (cid, aid, name, startTime, endTime string, kind, siz
 	}
 
 	lid, _ := utils.NewUUID()
-	pushUrl := "www.baidu.com"
-	pullHlsUrl := "www.11111.com"
-	pullRtmpUrl := "www.22222.com"
-	pullHttpFlvUrl := "www.33333.com"
-	displayUrl := "www.44444.com"
+	pushUrl,_ := url.NewRtmpUrl()
+	pullHlsUrl,_ := url.NewHlsUrl()
+	pullRtmpUrl,_ := url.NewRtmpUrl()
+	pullHttpFlvUrl,_ := url.NewFlvUrl()
+	displayUrl,_ := url.NewDisplayUrl()
 
 	_,err = stmtIns.Exec(lid, cid, name, kind, size, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, status, permission, createTime)
 	if err != nil {
@@ -232,16 +236,16 @@ func RetrieveLiveRoomByCid(Cid string) ([] defs.LiveRoomIdentity, error) {  //ไป
 	}
 
 	for rows.Next() {
-		var lid, cid, name, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, createTime string
+		var lid, cid, name, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, createTime, pictureUrl string
 		var kind, size, status, permission int
-		if er := rows.Scan(&lid, &cid, &name, &kind, &size, &startTime, &endTime, &pushUrl, &pullHlsUrl, &pullRtmpUrl, &pullHttpFlvUrl, &displayUrl, &status, &permission, &createTime); er != nil {
+		if er := rows.Scan(&lid, &cid, &name, &kind, &size, &startTime, &endTime, &pushUrl, &pullHlsUrl, &pullRtmpUrl, &pullHttpFlvUrl, &displayUrl, &status, &permission, &createTime, &pictureUrl); er != nil {
 			log.Printf("Retrieve live_room error: %s", er)
 			return nil, err
 		}
 
 		Lri := defs.LiveRoomIdentity{Lid: lid, Cid: cid,Name: name, Kind: kind, Size: size, StartTime: startTime, EndTime: endTime,
 			PushUrl: pushUrl, PullHlsUrl: pullHlsUrl, PullRtmpUrl: pullRtmpUrl, PullHttpFlvUrl: pullHttpFlvUrl,
-			DisplayUrl: displayUrl, Status: status, Permission: permission, CreateTime: createTime}
+			DisplayUrl: displayUrl, Status: status, Permission: permission, CreateTime: createTime, PictureUrl:pictureUrl}
 		Lri.Aid = cid
 		room = append(room, Lri)
 	}

@@ -78,6 +78,7 @@ type LiveRoomIdentity struct {
 	Status int `json:"status"`
 	Permission int `json:"permission"`
 	CreateTime string `json:"create_time"`
+	PictureUrl string `json:"picture_url"`
 }
 
 //文件资源
