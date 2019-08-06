@@ -137,3 +137,60 @@ func GetLRConfigByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	}
 }
 
+func GetLiveRoomAllConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	vars := r.URL.Query()
+	//aid := vars.Get("aid")
+	lid := vars.Get("lid")
+	//aid := vars.Get("aid")
+	roomConfig, err := dbop.GetAllConfigByLid(lid)
+	fmt.Println(roomConfig)
+	if err != nil {
+		sendErrorResponse(w,defs.ErrorDBError)
+		return
+	}
+	roomAllConfig := &defs.DataForAllConfig{}
+	roomAllConfig.Code = 200
+	roomAllConfig.Data.Prepic = roomConfig.Prepic
+	roomAllConfig.Data.Qorder = roomConfig.Qorder
+
+	roomAllConfig.Data.LivePic = roomConfig.LivePic
+	roomAllConfig.Data.Danmu = roomConfig.Danmu
+	roomAllConfig.Data.Chat = roomConfig.Chat
+	roomAllConfig.Data.Share = roomConfig.Share
+	roomAllConfig.Data.ShareText = roomConfig.ShareText
+	roomAllConfig.Data.Advertisement = roomConfig.Advertisement
+	roomAllConfig.Data.AdJumpUrl = roomConfig.AdJumpUrl
+	roomAllConfig.Data.AdPicUrl = roomConfig.AdPicUrl
+	roomAllConfig.Data.AdText = roomConfig.AdText
+
+	roomAllConfig.Data.Condition = 0
+
+	roomAllConfig.Data.Delay = roomConfig.Delay
+	roomAllConfig.Data.Transcode = roomConfig.Transcode
+	roomAllConfig.Data.TranscodeType = roomConfig.TranscodeType
+	roomAllConfig.Data.Record = roomConfig.Record
+	roomAllConfig.Data.RecordType = roomConfig.RecordType
+
+	roomAllConfig.Data.Logo = roomConfig.Logo
+	roomAllConfig.Data.LogoPosition = roomConfig.LogoPosition
+	roomAllConfig.Data.LogoTransparency = roomConfig.LogoTransparency
+	roomAllConfig.Data.LogoUrl = roomConfig.LogoUrl
+	roomAllConfig.Data.Lamp = roomConfig.Lamp
+	roomAllConfig.Data.LampFontSize = roomConfig.LampFontSize
+	roomAllConfig.Data.LampText = roomConfig.LampText
+	roomAllConfig.Data.LampTransparency = roomConfig.LampTransparency
+	roomAllConfig.Data.LampType = roomConfig.LampType
+
+	roomAllConfig.Data.WhiteSiteList = roomConfig.WhiteSiteList
+	roomAllConfig.Data.BlackSiteList = roomConfig.BlackSiteList
+
+	roomAllConfig.Data.LiveRoomInfo = roomConfig.LiveRoomInfo
+
+	if resp, err := json.Marshal(roomAllConfig); err != nil {
+		sendErrorResponse(w, defs.ErrorInternalFaults)
+		return
+	} else {
+		sendNormalResponse(w, string(resp),200)
+	}
+}
+

@@ -32,8 +32,6 @@ func handler () *httprouter.Router {
 	router.GET("/com/:cid/liveroom/config/", GetLRConfigByLid)
 	//直播观看条件管理
 
-
-
 	//服务设置管理
 	router.POST("/com/:cid/liveroom/quality/", InsertLRQuality)
 	router.PUT("/com/:cid/liveroom/quality/", UpdateLRQuality)
@@ -47,6 +45,9 @@ func handler () *httprouter.Router {
 	router.PUT("/com/:cid/liveroom/auth_safe/", UpdateLRAuthSafe)
 	router.GET("/com/:cid/liveroom/auth_safe_black/", GetLRAuthSafeBlackListByLid)
 	router.GET("/com/:cid/liveroom/auth_safe_white/", GetLRAuthSafeWhiteListByLid)
+
+	//获取全部权限信息
+	router.GET("/com/:cid/liveroom/all_config", GetLiveRoomAllConfig)
 
 	return router
 }
