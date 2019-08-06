@@ -55,6 +55,40 @@ func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime 
 	room.CreateTime = createTime
 	room.PictureUrl = pictureUrl
 
+	defaultConfig := defs.LiveRoomDefaultConfig
+    //为直播间设定默认引导界面信息
+	_, err = InsertLRIntroByCom(lid, defaultConfig.Qorder, defaultConfig.Prepic)
+	if err != nil {
+		log.Printf("Error of liverom_intro default setting:%v", err)
+		return nil, err
+	}
+	//为直播间设定默认页面设置
+	_, err = InsertLRConfigByCom(lid, defaultConfig.LivePic,defaultConfig.Danmu, defaultConfig.Chat, defaultConfig.Share,
+		                defaultConfig.ShareText, defaultConfig.Advertisement, defaultConfig.AdJumpUrl,
+		                defaultConfig.AdPicUrl, defaultConfig.AdText)
+	if err != nil {
+		log.Printf("Error of liverom_config default setting:%v", err)
+		return nil, err
+	}
+	//为直播间设定观看条件设置
+
+	//为直播间设定服务设置
+	_, err = InsertLRQualityByCom(lid, defaultConfig.Delay, defaultConfig.Transcode, defaultConfig.TranscodeType, defaultConfig.Record,
+	                     defaultConfig.RecordType)
+	if err != nil {
+		log.Printf("Error of liverom_quality default setting:%v", err)
+		return nil, err
+	}
+	//为直播间设定版本安全设置
+	_, err = InsertLRSafeByCom(lid,defaultConfig.Logo, defaultConfig.LogoUrl, defaultConfig.LogoPosition, defaultConfig.LogoTransparency,
+		              defaultConfig.Lamp, defaultConfig.LampType, defaultConfig.LampText, defaultConfig.LampFontSize,
+		              defaultConfig.LogoTransparency)
+	if err != nil {
+		log.Printf("Error of liverom_safe default setting:%v", err)
+		return nil, err
+	}
+	//为直播间设定权限安全设置，默认黑白名单均为空，无需处理
+
 	return  room, nil
 }
 
@@ -149,20 +183,20 @@ func SearchLiveRoomByCid(Cid string) (*sync.Map, int, error) {
 }
 
 func RetrieveLiveRoomByLid(Lid string) (*defs.LiveRoomIdentity, error) {//通过lid遍历查询
-	stmtOut, err := dbConn.Prepare("SELECT cid, name, kind, size, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, status, permission, create_time FROM live_room WHERE lid = ?")
+	stmtOut, err := dbConn.Prepare("SELECT cid, name, kind, size, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, status, permission, create_time, picture_url FROM live_room WHERE lid = ?")
 	if err != nil && err != sql.ErrNoRows{
 		log.Printf("%s", err)
 		return nil, err
 	}
-	var  cid, name, start_time, end_time, push_url, pull_hls_url, pull_rtmp_url, pull_http_flv_url, display_url, create_time string
+	var  cid, name, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, createTime, pictureUrl string
 	var kind, size, status, permission int
-	stmtOut.QueryRow(Lid).Scan(&cid, &name, &kind, &size, &start_time, &end_time, &push_url, &pull_hls_url, &pull_rtmp_url, &pull_http_flv_url, &display_url, &status, &permission, &create_time)
+	stmtOut.QueryRow(Lid).Scan(&cid, &name, &kind, &size, &startTime, &endTime, &pushUrl, &pullHlsUrl, &pullRtmpUrl, &pullHttpFlvUrl, &displayUrl, &status, &permission, &createTime, &pictureUrl)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
-	Lri := &defs.LiveRoomIdentity{Lid: Lid, Cid: cid,Name: name, Kind: kind, Size: size, StartTime: start_time, EndTime: end_time,
-		PushUrl: push_url, PullHlsUrl: pull_hls_url, PullRtmpUrl: pull_rtmp_url, PullHttpFlvUrl: pull_http_flv_url,
-		DisplayUrl: display_url, Status: status, Permission: permission, CreateTime: create_time}//绑定全部信息
+	Lri := &defs.LiveRoomIdentity{Lid: Lid, Cid: cid,Name: name, Kind: kind, Size: size, StartTime: startTime, EndTime: endTime,
+		PushUrl: pushUrl, PullHlsUrl: pullHlsUrl, PullRtmpUrl: pullRtmpUrl, PullHttpFlvUrl: pullHttpFlvUrl,
+		DisplayUrl: displayUrl, Status: status, Permission: permission, CreateTime: createTime, PictureUrl: pictureUrl} //绑定全部信息
 	defer stmtOut.Close()
 	return Lri, nil
 }

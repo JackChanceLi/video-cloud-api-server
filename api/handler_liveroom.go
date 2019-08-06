@@ -73,6 +73,8 @@ func CreateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 			return
 		}
 
+
+
 		roomInfo := &defs.LiveRoom{}
 		roomInfo.Code = 200
 		roomInfo.Data.LiveRoomInfo.Aid = room.Aid
@@ -103,11 +105,6 @@ func CreateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 }
 
 func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {//更新直播间信息
-	//ok := validateUserSession(r)
-	//if !ok {
-	//	sendErrorResponse(w, defs.ErrorNotAuthUser)
-	//	return
-	//}
 	cid := ps.ByName("cid")//获取cid
 	au := r.URL.Query()
 	aid := au.Get("aid")//获取aid
@@ -201,7 +198,7 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 			sendNormalResponse(w, string(resp), 200)
 		}
 	}
-	//defer session.UpdateSession(ubody.Aid)
+	defer session.UpdateSession(ubody.Aid)
 }
 
 func GetLiveRooms(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -307,6 +304,7 @@ func GetLiveRoomByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	roomInfo.Data.LiveRoomInfo.Status = room.Status
 	roomInfo.Data.LiveRoomInfo.Permission = room.Permission
 	roomInfo.Data.LiveRoomInfo.CreateTime = room.CreateTime
+	roomInfo.Data.LiveRoomInfo.PictureUrl = room.PictureUrl
 
 	if resp, err := json.Marshal(roomInfo); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)
