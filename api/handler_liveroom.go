@@ -128,7 +128,7 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	fmt.Println(ubody)
 
 	if cid == aid { //表示更新者为超级管理员
-		room, err := dbop.UpdateLiveRoom(ubody.Lid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime, ubody.Permission)
+		room, err := dbop.UpdateLiveRoom(ubody.Lid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime, ubody.PictureUrl, ubody.Permission)
 		if err != nil {
 			sendErrorResponse(w, defs.ErrorDBError)
 			return
@@ -170,7 +170,7 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 			return
 		}
 
-		room, err := dbop.UpdateLiveRoom(ubody.Lid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime, ubody.Permission)
+		room, err := dbop.UpdateLiveRoom(ubody.Lid, ubody.Name, ubody.Kind, ubody.Size, ubody.StartTime, ubody.EndTime, ubody.PictureUrl, ubody.Permission)
 		if err != nil {
 			sendErrorResponse(w, defs.ErrorDBError)
 			return
