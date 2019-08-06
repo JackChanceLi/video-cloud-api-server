@@ -107,8 +107,11 @@ type ResourseIdentity struct {
 	Size float64 `json:"size"`
 	Label string `json:"label"`
 	Time string `json:"time"`
+	ResUrl string `json:"res_url"`
+	PicUrl string `json:"pic_url"`
 }
 
+//从OSS获取token
 type Token struct {
 	StatusCode string `json:"status_code"`
 	AccessKeyId string `json:"access_key_id"`

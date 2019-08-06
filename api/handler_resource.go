@@ -26,7 +26,7 @@ func UploadResourse(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 		return
 	}
 	fmt.Println(ubody)
-	Res, err := dbop.UploadResourseByCom(ubody.Aid, cid, ubody.Name, ubody.Rtype, ubody.Size, ubody.Label)
+	Res, err := dbop.UploadResourseByCom(ubody.Aid, cid, ubody.Name, ubody.Rtype, ubody.Size, ubody.Label, ubody.ResUrl, ubody.PicUrl)
 	if  err != nil {
 		sendErrorResponse(w, defs.ErrorDBError)
 		return
@@ -42,6 +42,8 @@ func UploadResourse(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	ResInfo.Data.ResourseInfo.Size = Res.Size
 	ResInfo.Data.ResourseInfo.Label = Res.Label
 	ResInfo.Data.ResourseInfo.Time = Res.Time
+	ResInfo.Data.ResourseInfo.ResUrl = Res.ResUrl
+	ResInfo.Data.ResourseInfo.PicUrl = Res.PicUrl
 
 	if resp, err := json.Marshal(ResInfo); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)
@@ -71,7 +73,7 @@ func UpdateResourse(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	}
 	fmt.Println(ubody)
 
-	Res, err := dbop.UpdateResourse(ubody.Rid, ubody.Name, ubody.Label)
+	Res, err := dbop.UpdateResourse(ubody.Rid, ubody.Name, ubody.Label, ubody.PicUrl)
 	if err != nil {
 		sendErrorResponse(w, defs.ErrorDBError)
 		return
@@ -86,6 +88,8 @@ func UpdateResourse(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	ResInfo.Data.ResourseInfo.Size = Res.Size
 	ResInfo.Data.ResourseInfo.Label = Res.Label
 	ResInfo.Data.ResourseInfo.Time = Res.Time
+	ResInfo.Data.ResourseInfo.ResUrl = Res.ResUrl
+	ResInfo.Data.ResourseInfo.PicUrl = Res.PicUrl
 
 	if resp, err := json.Marshal(ResInfo); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)
@@ -170,6 +174,8 @@ func GetResourseByRid(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	ResInfo.Data.ResourseInfo.Size = Res.Size
 	ResInfo.Data.ResourseInfo.Label = Res.Label
 	ResInfo.Data.ResourseInfo.Time = Res.Time
+	ResInfo.Data.ResourseInfo.ResUrl = Res.ResUrl
+	ResInfo.Data.ResourseInfo.PicUrl = Res.PicUrl
 
 	if resp, err := json.Marshal(ResInfo); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)
