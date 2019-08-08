@@ -47,6 +47,8 @@ func handler () *httprouter.Router {
 	router.GET("/com/:cid/liveroom/auth_safe_white/", GetLRAuthSafeWhiteListByLid)
 	//获取全部权限信息
 	router.GET("/com/:cid/liveroom/all_config", GetLiveRoomAllConfig)
+	//获取直播间配置信息
+	router.GET("/channel/:channel_id/info", GetLiveRoomAllConfig)
 
 	return router
 }

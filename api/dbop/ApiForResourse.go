@@ -6,9 +6,10 @@ import (
 	"go-api-server/api/defs"
 	"go-api-server/api/utils"
 	"log"
+	"strings"
 )
 
-func UploadResourseByCom(aid string, cid string, name string, rtype string, size float64, label string, res_url string, pic_url string) (*defs.ResourseIdentity,error) {
+func UploadResourseByCom(aid string, cid string, name string, rtype string, size float64, label []string, res_url string, pic_url string) (*defs.ResourseIdentity,error) {
 	time, _ := getCurrentTime()
 	stmtIns, err := dbConn.Prepare("INSERT INTO resourse (rid, aid, cid, name, rtype, size, label, time, res_url, pic_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
@@ -16,7 +17,15 @@ func UploadResourseByCom(aid string, cid string, name string, rtype string, size
 	}
 
 	rid, _ := utils.NewUUID()
-	_,err = stmtIns.Exec(rid, aid, cid, name, rtype, size, label, time, res_url, pic_url)
+	var store string
+	if len(label) == 1 {
+		store = label[0]
+	} else{
+		for i := 0; i < len(label); i++ {
+			store += label[i] + ";"
+		}
+	}
+	_,err = stmtIns.Exec(rid, aid, cid, name, rtype, size, store, time, res_url, pic_url)
 	if err != nil {
 		return nil, err
 	}
@@ -56,14 +65,23 @@ func DeleteResourse(rid string) error {
 	return nil
 }
 
-func UpdateResourse(rid string, name string, label string, pic_url string) (*defs.ResourseIdentity,error) {
+func UpdateResourse(rid string, name string, label []string, pic_url string) (*defs.ResourseIdentity,error) {
 	stmtUpa, err := dbConn.Prepare("UPDATE resourse SET name = ?, label = ?, pic_url = ? WHERE rid = ?")
 	if err != nil {
 		log.Printf("%s",err)
 		return nil, err
 	}
 
-	_,err = stmtUpa.Exec(name, label, pic_url, rid)
+	var store string
+	if len(label) == 1 {
+		store = label[0]
+	} else{
+		for i := 0; i < len(label); i++ {
+			store += label[i] + ";"
+		}
+	}
+
+	_,err = stmtUpa.Exec(name, store, pic_url, rid)
 	if err != nil {
 		return nil, err
 	}
@@ -96,13 +114,15 @@ func RetrieveResourseByRid(Rid string) (*defs.ResourseIdentity, error) {
 		return nil, err
 	}
 
-	var aid, cid, name, rtype, label, time, res_url, pic_url string
+	var aid, cid, name, rtype, llabel, time, res_url, pic_url string
+	var label []string
 	var size float64
-	stmtOut.QueryRow(Rid).Scan(&aid, &cid, &name, &rtype, &size, &label, &time, &res_url, &pic_url)
+	stmtOut.QueryRow(Rid).Scan(&aid, &cid, &name, &rtype, &size, &llabel, &time, &res_url, &pic_url)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
 
+	label = strings.Split(llabel, ";")
 	res := &defs.ResourseIdentity{Rid: Rid, Aid: aid, Cid: cid, Name: name, Rtype: rtype, Size: size, Label: label, Time: time, ResUrl: res_url, PicUrl: pic_url}
 	defer stmtOut.Close()
 	return res, nil
@@ -123,13 +143,14 @@ func RetrieveResourseByCid(Cid string) ([] defs.ResourseIdentity, error) {  //æŸ
 	}
 
 	for rows.Next() {
-		var rid, aid, cid, name, rtype, label, time, res_url, pic_url string
+		var rid, aid, cid, name, rtype, llabel, time, res_url, pic_url string
+		var label []string
 		var size float64
-		if er := rows.Scan(&rid, &aid, &name, &rtype, &size, &label, &time, &res_url, &pic_url); er != nil {
+		if er := rows.Scan(&rid, &aid, &name, &rtype, &size, &llabel, &time, &res_url, &pic_url); er != nil {
 			log.Printf("Retrieve resourse error: %s", er)
 			return nil, err
 		}
-
+		label = strings.Split(llabel, ";")
 		Res := defs.ResourseIdentity{Rid: rid, Aid: aid, Cid: cid, Name: name, Rtype: rtype, Size: size, Label: label, Time: time, ResUrl: res_url, PicUrl: pic_url}
 		resourse = append(resourse, Res)
 	}
