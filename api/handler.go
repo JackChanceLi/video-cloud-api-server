@@ -74,7 +74,7 @@ func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	fmt.Println(ubody)
 
-	ok, err := dbop.IsEmailRegister(ubody.Email)  //判断该邮箱是否已经注册
+	ok, _, err := dbop.IsEmailRegister(ubody.Email)  //判断该邮箱是否已经注册
 	if !ok && err == nil {  //表示该邮箱已经被注册
 		sendErrorResponse(w, defs.ErrorEmailRegistered)
 		return

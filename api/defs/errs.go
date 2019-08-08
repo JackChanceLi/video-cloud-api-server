@@ -27,5 +27,6 @@ var (
 	ErrRequestParamParseFailed = ErrorResponse{ErrorCode: 402, Msg:Message{Error: "Request params parse failed", ErrorCode:"006"}}
 	ErrNoRowsInDB              = ErrorResponse{ErrorCode:405, Msg:Message{Error:"No result for retrieve liveroom by lid", ErrorCode:"007"}}
 	ErrorNotAuthUserForRoom    = ErrorResponse{ErrorCode:403, Msg:Message{Error:"User auth failed for the liveroom", ErrorCode:"008"}}
+	ErrorEmailNotRegistered    = ErrorResponse{ErrorCode:406, Msg:Message{Error:"Email has not been registered", ErrorCode:"009"}}
 )
 

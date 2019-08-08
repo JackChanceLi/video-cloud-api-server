@@ -4,5 +4,5 @@ var (
 	IP = "39.106.194.43"
 	PORT = ":1935/"
 	LiveName = "live/"
-    Host = "localhost"
+    Host = "39.106.194.43"
 )
