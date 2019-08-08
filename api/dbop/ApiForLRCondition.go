@@ -9,7 +9,6 @@ import (
 )
 
 func InsertLRConditionByCom(lid, verificationCode string, condition ,conditionType, duration, tryToSee int, price float32) (*defs.LiveRoomCondition, error) {
-
 	stmtIns, err := dbConn.Prepare("INSERT INTO live_condition (lid, lcondition, condition_type, price, duration, try_to_see, verification_code) VALUES (?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		log.Printf("pareparation:%v", err)
@@ -39,7 +38,7 @@ func InsertLRConditionByCom(lid, verificationCode string, condition ,conditionTy
 
 func UpdateLRConditionByLid(lid, verificationCode, email string, condition, conditionType, duration, tryToSee int, price float32) (*defs.LiveRoomCondition, error) {
 	Condition := defs.LiveRoomDefaultConfig
-	if condition == 0 { //表示此时观看条件为无条件观看
+	if condition == 1 { //表示此时观看条件为无条件观看
 		stmtUpa, err := dbConn.Prepare("UPDATE live_condition SET lcondition = ?, condition_type = ?, price = ?, duration = ?, try_to_see = ?, verification_code = ? WHERE lid = ?")
 		if err != nil {
 			log.Printf("Error of preparation of update live_condition_1:%v", err)
@@ -53,11 +52,11 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 		log.Printf("Update live_condition_1 success\n")
 		defer stmtUpa.Close()
 		roomCondition := &defs.LiveRoomCondition{}
-		roomCondition.Condition = 0
+		roomCondition.Condition = 1
 		return roomCondition, nil
 	} else {
 		if conditionType == 1 { //表示观看条件为付费观看
-			stmtUpa, err := dbConn.Prepare("UPDATE live_condition SET lcondition = 1, condition_type = 1, price = ?, duration = ?, try_to_see = ?, verification_code = ? WHERE lid = ?")
+			stmtUpa, err := dbConn.Prepare("UPDATE live_condition SET lcondition = 0, condition_type = 1, price = ?, duration = ?, try_to_see = ?, verification_code = ? WHERE lid = ?")
 			if err != nil {
 				log.Printf("Error of preparation of update live_condition_2:%v", err)
 				return nil, err
@@ -70,7 +69,7 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 			log.Printf("Update live_condition_2 success\n")
 			defer stmtUpa.Close()
 			roomCondition := &defs.LiveRoomCondition{}
-			roomCondition.Condition = 1
+			roomCondition.Condition = 0
 			roomCondition.ConditionType = 1
 			roomCondition.TryToSee = tryToSee
 			roomCondition.Duration = duration
@@ -95,7 +94,7 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 				}
 
 
-				stmtUpa, err := dbConn.Prepare("UPDATE live_condition SET lcondition = 1, condition_type = 2, price = ?, duration = ?, try_to_see = ?, verification_code = ? WHERE lid = ?")
+				stmtUpa, err := dbConn.Prepare("UPDATE live_condition SET lcondition = 0, condition_type = 2, price = ?, duration = ?, try_to_see = ?, verification_code = ? WHERE lid = ?")
 				if err != nil {
 					log.Printf("Error of preparation of update live_condition_3:%v", err)
 					return nil, err
@@ -110,7 +109,7 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 				emailList, err := RetrieveWhitelistByLid(lid)
 				roomCondition := &defs.LiveRoomCondition{}
 				roomCondition.ConditionType = 2
-				roomCondition.Condition = 1
+				roomCondition.Condition = 0
 				roomCondition.WhiteUserList = emailList
 				return roomCondition, nil
 			}
@@ -122,7 +121,7 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 			} else {
 				newCode = verificationCode
 			}
-			stmtUpa, err := dbConn.Prepare("UPDATE live_condition SET lcondition = 1, condition_type = 3, price = ?, duration = ?, try_to_see = ?, verification_code = ? WHERE lid = ?")
+			stmtUpa, err := dbConn.Prepare("UPDATE live_condition SET lcondition = 0, condition_type = 3, price = ?, duration = ?, try_to_see = ?, verification_code = ? WHERE lid = ?")
 			if err != nil {
 				log.Printf("Error of preparation of update live_condition_4:%v", err)
 				return nil, err
@@ -134,7 +133,7 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 			}
 			log.Printf("Update live_condition_4 success\n")
 			roomCondition := &defs.LiveRoomCondition{}
-			roomCondition.Condition = 1
+			roomCondition.Condition = 0
 			roomCondition.ConditionType = 3
 			roomCondition.VerificationCode = newCode
 			return roomCondition, nil

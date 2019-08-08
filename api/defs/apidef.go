@@ -223,7 +223,7 @@ type LiveRoomQualityIdentity struct {
 	Lid string `json:"lid"`
 	Delay int `json:"delay"`
 	Transcode int `json:"transcode"`
-	TranscodeType int `json:"transcode_type"`
+	TranscodeType []int `json:"transcode_type"`
 	Record int `json:"record"`
 	RecordType int `json:"record_type"`
 }
