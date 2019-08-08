@@ -13,11 +13,6 @@ import (
 )
 
 func CreateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	ok := validateUserSession(r)
-	if !ok {
-		sendErrorResponse(w, defs.ErrorNotAuthUser)
-		return
-	}
 	cid := ps.ByName("cid")
 	res, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -202,11 +197,6 @@ func UpdateLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 }
 
 func GetLiveRooms(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	ok := validateUserSession(r)
-	if !ok {
-		sendErrorResponse(w, defs.ErrorNotAuthUser)
-		return
-	}
 	cid := ps.ByName("cid")
 	vars := r.URL.Query()
 	aid := vars.Get("aid")
@@ -262,11 +252,6 @@ func DeleteLiveRoom(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 }
 
 func GetLiveRoomByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	ok := validateUserSession(r)
-	if !ok {
-		sendErrorResponse(w, defs.ErrorNotAuthUser)
-		return
-	}
 	cid := ps.ByName("cid")
 	vars := r.URL.Query()
 	lid := vars.Get("lid")

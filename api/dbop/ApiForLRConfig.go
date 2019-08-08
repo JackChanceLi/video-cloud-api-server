@@ -76,14 +76,14 @@ func RetrieveLRConfigByLid(Lid string) (*defs.LiveRoomConfigIdentity, error) {
 		return nil, err
 	}
 
-	var live_pic, share_text, ad_jump_url, ad_pic_url, ad_text string
+	var livePic, shareText, adJumpUrl, adPicUrl, adText string
 	var danmu, chat, share, advertisement int
-	stmtOut.QueryRow(Lid).Scan(&live_pic, &danmu, &chat, &share, &share_text, &advertisement, &ad_jump_url, &ad_pic_url, &ad_text)
+	err = stmtOut.QueryRow(Lid).Scan(&livePic, &danmu, &chat, &share, &shareText, &advertisement, &adJumpUrl, &adPicUrl, &adText)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
 
-	LRCon := &defs.LiveRoomConfigIdentity{Lid: Lid, LivePic: live_pic, Danmu: danmu, Chat: chat, Share: share, ShareText: share_text, Advertisement: advertisement, AdJumpUrl: ad_jump_url, AdPicUrl: ad_pic_url, AdText: ad_text}
+	LRCon := &defs.LiveRoomConfigIdentity{Lid: Lid, LivePic: livePic, Danmu: danmu, Chat: chat, Share: share, ShareText: shareText, Advertisement: advertisement, AdJumpUrl: adJumpUrl, AdPicUrl: adPicUrl, AdText: adText}
 	defer stmtOut.Close()
 	return LRCon, nil
 }

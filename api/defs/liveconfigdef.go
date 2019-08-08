@@ -47,6 +47,7 @@ type LiveRoomAllConfig struct {
 }
 
 type LiveRoomCondition struct {
+	Lid              string   `json:"lid"`
 	Condition        int      `json:"condition"`
 	ConditionType    int      `json:"condition_type"`
 	Price            float32  `json:"price"`
@@ -55,6 +56,7 @@ type LiveRoomCondition struct {
 	Email            string   `json:"email"`
 	VerificationCode string   `json:"verification_code"`
 	WhiteUserList    string `json:"white_user_list"`
+
 }
 
 type DataForCondition struct {

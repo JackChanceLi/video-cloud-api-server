@@ -137,7 +137,7 @@ func GetLRConfigByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	}
 }
 
-func GetLiveRoomAllConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func GetLiveRoomAllConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {  //获取包括直播间基本信息的全部配置信息
 	vars := r.URL.Query()
 	//aid := vars.Get("aid")
 	lid := vars.Get("lid")
