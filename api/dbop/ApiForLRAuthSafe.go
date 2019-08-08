@@ -7,38 +7,15 @@ import (
 	"log"
 )
 
-func InsertLRAuthSafeByCom(lid string, website string, wtype int) (*defs.LiveRoomAuthSafeIdentity,error) {
-	stmtIns, err := dbConn.Prepare("INSERT INTO live_auth_safe (lid, website, wtype) VALUES (?, ?, ?)")
+
+func UpdateLRAuthSafe(lid string, WhiteSiteList string, BlackSiteList string) (*defs.LiveRoomAuthSafeIdentity, error) {
+	stmtUpa, err := dbConn.Prepare("UPDATE live_auth_safe SET white_site_list = ?, black_site_list = ? WHERE lid = ? ")
 	if err != nil {
 		log.Printf("%s",err)
 		return nil, err
 	}
 
-	_,err = stmtIns.Exec(lid, website, wtype)
-	if err != nil {
-		return nil, err
-	}
-
-	log.Printf(" Insert success")
-
-	defer stmtIns.Close()
-
-	LRAS := &defs.LiveRoomAuthSafeIdentity{}
-	LRAS.Lid = lid
-	LRAS.Website = website
-	LRAS.Wtype = wtype
-
-	return LRAS, nil
-}
-
-func UpdateLRAuthSafe(lid string, website string, wtype int) (*defs.LiveRoomAuthSafeIdentity,error) {
-	stmtUpa, err := dbConn.Prepare("UPDATE live_auth_safe SET wtype = ? WHERE lid = ? and website = ?")
-	if err != nil {
-		log.Printf("%s",err)
-		return nil, err
-	}
-
-	_,err = stmtUpa.Exec(wtype, lid, website)
+	_,err = stmtUpa.Exec(WhiteSiteList, BlackSiteList, lid)
 	if err != nil {
 		log.Printf("%s",err)
 		return nil, err
@@ -50,83 +27,49 @@ func UpdateLRAuthSafe(lid string, website string, wtype int) (*defs.LiveRoomAuth
 
 	LRAS := &defs.LiveRoomAuthSafeIdentity{}
 	LRAS.Lid = lid
-	LRAS.Website = website
-	LRAS.Wtype = wtype
+	LRAS.WhiteSiteList = WhiteSiteList
+	LRAS.BlackSiteList = BlackSiteList
 
 	return LRAS, nil
 }
 
 func RetrieveLRAuthSafeByLid(Lid string) (*defs.LiveRoomAuthSafeIdentity, error) {
-	stmtOut, err := dbConn.Prepare("SELECT website, wtype FROM live_auth_safe WHERE lid = ?")
+	stmtOut, err := dbConn.Prepare("SELECT white_site_list, black_site_list FROM live_auth_safe WHERE lid = ?")
 	if err != nil {
 		log.Printf("%s", err)
 		return nil, err
 	}
 
-	var website string
-	var wtype int
-	stmtOut.QueryRow(Lid).Scan(&website, &wtype)
+	var white_site_list, black_site_list string
+	stmtOut.QueryRow(Lid).Scan(&white_site_list, &black_site_list)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
 
-	LRAS := &defs.LiveRoomAuthSafeIdentity{Lid: Lid, Website: website, Wtype: wtype}
+	LRAS := &defs.LiveRoomAuthSafeIdentity{Lid: Lid, WhiteSiteList: white_site_list, BlackSiteList: black_site_list}
 	defer stmtOut.Close()
 	return LRAS, nil
 }
 
-func RetrieveLRAuthSafeWhiteList(Lid string) ([] defs.LiveRoomAuthSafeIdentity, error) {  //以切片的形式返回查询直播间权限安全白名单的结果
-	var LRAS [] defs.LiveRoomAuthSafeIdentity
-	stmtOut, err := dbConn.Prepare("SELECT * FROM live_auth_safe WHERE lid = ? and wtype = ?")
+func RetrieveLRAuthSafeList(Lid string) (* defs.LiveRoomAuthSafeIdentity, error) {  //以切片的形式返回查询直播间权限安全白名单的结果
+	stmtOut, err := dbConn.Prepare("SELECT white_site_list, black_site_list FROM live_auth_safe WHERE lid = ? ")
 	if err != nil {
 		log.Printf("%s", err)
 		return nil, err
 	}
 	//cid := Cid
-	rows, err := stmtOut.Query(Lid, 0)
+	row, err := stmtOut.Query(Lid)
 	if err != nil {
 		log.Printf("%s", err)
 		return nil, err
 	}
 
-	for rows.Next() {
-		var lid, website string
-		var wtype int
-		if er := rows.Scan(&lid, &website, &wtype); er != nil {
-			log.Printf("Retrieve live_auth_safe error: %s", er)
-			return nil, err
-		}
-
-		Lras := defs.LiveRoomAuthSafeIdentity{Lid: Lid, Website: website, Wtype: 0}
-		LRAS = append(LRAS, Lras)
-	}
-	return LRAS, nil
-}
-
-func RetrieveLRAuthSafeBlackList(Lid string) ([] defs.LiveRoomAuthSafeIdentity, error) {  //以切片的形式返回查询直播间权限安全黑名单的结果
-	var LRAS [] defs.LiveRoomAuthSafeIdentity
-	stmtOut, err := dbConn.Prepare("SELECT * FROM live_auth_safe WHERE lid = ? and wtype = ?")
-	if err != nil {
-		log.Printf("%s", err)
-		return nil, err
-	}
-	//cid := Cid
-	rows, err := stmtOut.Query(Lid, 1)
-	if err != nil {
-		log.Printf("%s", err)
+	var white_site_list, black_site_list string
+	if er := row.Scan(&white_site_list, &black_site_list); er != nil {
+		log.Printf("Retrieve live_auth_safe error: %s", er)
 		return nil, err
 	}
 
-	for rows.Next() {
-		var lid, website string
-		var wtype int
-		if er := rows.Scan(&lid, &website, &wtype); er != nil {
-			log.Printf("Retrieve live_auth_safe error: %s", er)
-			return nil, err
-		}
-
-		Lras := defs.LiveRoomAuthSafeIdentity{Lid: Lid, Website: website, Wtype: 1}
-		LRAS = append(LRAS, Lras)
-	}
+	LRAS := &defs.LiveRoomAuthSafeIdentity{Lid: Lid, WhiteSiteList: white_site_list, BlackSiteList: black_site_list}
 	return LRAS, nil
 }

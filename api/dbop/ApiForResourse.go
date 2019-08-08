@@ -18,12 +18,9 @@ func UploadResourseByCom(aid string, cid string, name string, rtype string, size
 
 	rid, _ := utils.NewUUID()
 	var store string
-	if len(label) == 1 {
-		store = label[0]
-	} else{
-		for i := 0; i < len(label); i++ {
-			store += label[i] + ";"
-		}
+	store = label[0]
+	for i := 1; i < len(label); i++ {
+		store += ";" + label[i]
 	}
 	_,err = stmtIns.Exec(rid, aid, cid, name, rtype, size, store, time, res_url, pic_url)
 	if err != nil {
@@ -73,12 +70,9 @@ func UpdateResourse(rid string, name string, label []string, pic_url string) (*d
 	}
 
 	var store string
-	if len(label) == 1 {
-		store = label[0]
-	} else{
-		for i := 0; i < len(label); i++ {
-			store += label[i] + ";"
-		}
+	store = label[0]
+	for i := 1; i < len(label); i++ {
+		store += ";" + label[i]
 	}
 
 	_,err = stmtUpa.Exec(name, store, pic_url, rid)

@@ -30,7 +30,7 @@ func InsertLRAuthSafe(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 		return
 	}
 	fmt.Println(ubody)
-	Res, err := dbop.InsertLRAuthSafeByCom(ubody.Lid, ubody.Website, ubody.Wtype)
+	Res, err := dbop.UpdateLRAuthSafe(ubody.Lid, ubody.WhiteSiteList, ubody.BlackSiteList)
 	if  err != nil {
 		sendErrorResponse(w, defs.ErrorDBError)
 		return
@@ -39,8 +39,8 @@ func InsertLRAuthSafe(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	LRAS := &defs.LiveRoomAuthSafe{}
 	LRAS.Code = 200
 	LRAS.Data.LiveRoomAuthSafeInfo.Lid = Res.Lid
-	LRAS.Data.LiveRoomAuthSafeInfo.Website = Res.Website
-	LRAS.Data.LiveRoomAuthSafeInfo.Wtype = Res.Wtype
+	LRAS.Data.LiveRoomAuthSafeInfo.WhiteSiteList = Res.WhiteSiteList
+	LRAS.Data.LiveRoomAuthSafeInfo.BlackSiteList = Res.BlackSiteList
 
 	if resp, err := json.Marshal(LRAS); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)
@@ -70,7 +70,7 @@ func UpdateLRAuthSafe(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	}
 	fmt.Println(ubody)
 
-	Res, err := dbop.UpdateLRAuthSafe(ubody.Lid, ubody.Website, ubody.Wtype)
+	Res, err := dbop.UpdateLRAuthSafe(ubody.Lid, ubody.WhiteSiteList, ubody.BlackSiteList)
 	if err != nil {
 		sendErrorResponse(w, defs.ErrorDBError)
 		return
@@ -78,8 +78,8 @@ func UpdateLRAuthSafe(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	LRAS := &defs.LiveRoomAuthSafe{}
 	LRAS.Code = 200
 	LRAS.Data.LiveRoomAuthSafeInfo.Lid = Res.Lid
-	LRAS.Data.LiveRoomAuthSafeInfo.Website = Res.Website
-	LRAS.Data.LiveRoomAuthSafeInfo.Wtype = Res.Wtype
+	LRAS.Data.LiveRoomAuthSafeInfo.WhiteSiteList = Res.WhiteSiteList
+	LRAS.Data.LiveRoomAuthSafeInfo.BlackSiteList = Res.BlackSiteList
 
 	if resp, err := json.Marshal(LRAS); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)
@@ -89,46 +89,23 @@ func UpdateLRAuthSafe(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	}
 }
 
-func GetLRAuthSafeBlackListByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Params) { //获取直播间权限安全黑名单
+func GetLRAuthSafeByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Params) { //获取直播间权限安全黑白名单
 	//cid := ps.ByName("cid")
 	vars := r.URL.Query()
 	//aid := vars.Get("aid")
 	lid := vars.Get("lid")
 
-	Res, err := dbop.RetrieveLRAuthSafeBlackList(lid)
+	Res, err := dbop.RetrieveLRAuthSafeList(lid)
 	if err != nil {
 		sendErrorResponse(w, defs.ErrorDBError)
 		return
 	}
 
-	LRASWL := &defs.LiveRoomAuthSafeList{}
+	LRASWL := &defs.LiveRoomAuthSafe{}
 	LRASWL.Code = 200
-	LRASWL.Data = Res
-
-	if resp, err := json.Marshal(LRASWL); err != nil {
-		sendErrorResponse(w, defs.ErrorInternalFaults)
-		return
-	} else {
-		sendNormalResponse(w, string(resp),200)
-	}
-
-}
-
-func GetLRAuthSafeWhiteListByLid(w http.ResponseWriter, r *http.Request, ps httprouter.Params) { //获取直播间权限安全白名单
-	//cid := ps.ByName("cid")
-	vars := r.URL.Query()
-	//aid := vars.Get("aid")
-	lid := vars.Get("lid")
-
-	Res, err := dbop.RetrieveLRAuthSafeWhiteList(lid)
-	if err != nil {
-		sendErrorResponse(w, defs.ErrorDBError)
-		return
-	}
-
-	LRASWL := &defs.LiveRoomAuthSafeList{}
-	LRASWL.Code = 200
-	LRASWL.Data = Res
+	LRASWL.Data.LiveRoomAuthSafeInfo.Lid = Res.Lid
+	LRASWL.Data.LiveRoomAuthSafeInfo.WhiteSiteList = Res.WhiteSiteList
+	LRASWL.Data.LiveRoomAuthSafeInfo.BlackSiteList = Res.BlackSiteList
 
 	if resp, err := json.Marshal(LRASWL); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)
