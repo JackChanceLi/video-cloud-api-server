@@ -105,7 +105,7 @@ type ResourseIdentity struct {
 	Name string  `json:"name"`
 	Rtype string `json:"rtype"`
 	Size float64 `json:"size"`
-	Label string `json:"label"`
+	Label []string `json:"label"`
 	Time string `json:"time"`
 	ResUrl string `json:"res_url"`
 	PicUrl string `json:"pic_url"`
