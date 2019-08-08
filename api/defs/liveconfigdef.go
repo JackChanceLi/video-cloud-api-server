@@ -35,11 +35,11 @@ type LiveRoomAllConfig struct {
 	LampFontSize     int    `json:"lamp_font_size"`
 	LampTransparency int    `json:"lamp_transparency"`
 	//直播质量设置
-	Delay         int `json:"delay"`
-	Transcode     int `json:"transcode"`
-	TranscodeType int `json:"transcode_type"`
-	Record        int `json:"record"`
-	RecordType    int `json:"record_type"`
+	Delay         int   `json:"delay"`
+	Transcode     int   `json:"transcode"`
+	TranscodeType []int `json:"transcode_type"`
+	Record        int   `json:"record"`
+	RecordType    int   `json:"record_type"`
 	//直播权限安全设置
 	WhiteSiteList string  `json:"white_site_list"`
 	BlackSiteList string  `json:"black_site_list"`

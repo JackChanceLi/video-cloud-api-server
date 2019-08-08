@@ -33,7 +33,19 @@ func GetAllConfigByLid(lid string) (*defs.LiveRoomAllConfig, error) {
     roomAllConfig.AdText = roomConfig.AdText
 
     //获取观看条件设置，暂未完成此处功能，后续添加
-    roomAllConfig.Condition = 0
+    roomCondition, err := RetrieveLRConditionByLid(lid)
+    if err != nil {
+		fmt.Printf("Error of retrieve liveroom_condition:%v", err)
+		return nil, err
+	}
+    fmt.Println(roomCondition.Condition)
+    roomAllConfig.Condition = roomCondition.Condition
+    roomAllConfig.ConditionType = roomCondition.ConditionType
+    roomAllConfig.Price = roomCondition.Price
+    roomAllConfig.Duration = roomCondition.Duration
+    roomAllConfig.TryToSee = roomCondition.TryToSee
+    roomAllConfig.VerificationCode = roomCondition.VerificationCode
+    roomAllConfig.WhiteUserList = roomCondition.WhiteUserList
 
     //获取直播服务设置
     roomQuality, err := RetrieveLRQualityByLid(lid)

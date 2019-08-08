@@ -34,15 +34,16 @@ func UpdateLRCondition(w http.ResponseWriter, r *http.Request, ps httprouter.Par
     	sendErrorResponse(w, defs.ErrorDBError)
 		return
 	}
-    roomCondition := &defs.LiveRoomCondition{}
-    roomCondition.Lid = condition.Lid
-    roomCondition.Condition = condition.Condition
-    roomCondition.ConditionType = condition.ConditionType
-    roomCondition.Price = condition.Price
-    roomCondition.Duration = condition.Duration
-    roomCondition.TryToSee = condition.TryToSee
-    roomCondition.VerificationCode = condition.VerificationCode
-    roomCondition.WhiteUserList = condition.WhiteUserList
+    roomCondition := &defs.DataForCondition{}
+    roomCondition.Code = 200
+    roomCondition.Data.Lid = condition.Lid
+    roomCondition.Data.Condition = condition.Condition
+    roomCondition.Data.ConditionType = condition.ConditionType
+    roomCondition.Data.Price = condition.Price
+    roomCondition.Data.Duration = condition.Duration
+    roomCondition.Data.TryToSee = condition.TryToSee
+    roomCondition.Data.VerificationCode = condition.VerificationCode
+    roomCondition.Data.WhiteUserList = condition.WhiteUserList
 
 	if resp, err := json.Marshal(roomCondition); err != nil {
 		sendErrorResponse(w, defs.ErrorInternalFaults)

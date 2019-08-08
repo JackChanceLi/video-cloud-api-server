@@ -163,7 +163,13 @@ func GetLiveRoomAllConfig(w http.ResponseWriter, r *http.Request, ps httprouter.
 	roomAllConfig.Data.AdPicUrl = roomConfig.AdPicUrl
 	roomAllConfig.Data.AdText = roomConfig.AdText
 
-	roomAllConfig.Data.Condition = 0
+	roomAllConfig.Data.Condition = roomConfig.Condition
+	roomAllConfig.Data.ConditionType = roomConfig.ConditionType
+	roomAllConfig.Data.Duration = roomConfig.Duration
+	roomAllConfig.Data.Price = roomConfig.Price
+	roomAllConfig.Data.TryToSee = roomConfig.TryToSee
+	roomAllConfig.Data.WhiteUserList = roomConfig.WhiteUserList
+	roomAllConfig.Data.VerificationCode = roomConfig.VerificationCode
 
 	roomAllConfig.Data.Delay = roomConfig.Delay
 	roomAllConfig.Data.Transcode = roomConfig.Transcode
