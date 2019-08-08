@@ -13,7 +13,7 @@ type LiveRoomAllConfig struct {
 	TryToSee         int      `json:"try_to_see"`
 	Email            string   `json:"email"`
 	VerificationCode string   `json:"verification_code"`
-	WhiteUserList    string `json:"white_user_list"`
+	WhiteUserList    []string `json:"white_user_list"`
 	//直播配置
 	LivePic       string `json:"live_pic"`
 	Danmu         int    `json:"danmu"`
@@ -55,7 +55,7 @@ type LiveRoomCondition struct {
 	TryToSee         int      `json:"try_to_see"`
 	Email            string   `json:"email"`
 	VerificationCode string   `json:"verification_code"`
-	WhiteUserList    string `json:"white_user_list"`
+	WhiteUserList    []string `json:"white_user_list"`
 
 }
 

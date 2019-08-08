@@ -61,22 +61,22 @@ func UserLogin(email string) (*defs.UserInformation, string, error) {
 	return UI, password, nil
 
 }
-func IsEmailRegister(email string) (bool, error) {
-	actOut,err := dbConn.Prepare("SELECT cid from company WHERE email = ?")
+func IsEmailRegister(email string) (bool, string, error) {
+	actOut,err := dbConn.Prepare("SELECT uname from company WHERE email = ?")
 	if err != nil { //表示查询出错
 		log.Printf("%s", err)
-		return true, err
+		return true, "", err
 	}
-	var cid string
-	err = actOut.QueryRow(email).Scan(&cid)
+	var uname string
+	err = actOut.QueryRow(email).Scan(&uname)
 	if err!= nil && err == sql.ErrNoRows {  //没有此邮箱，表示该邮箱未注册
-		return false, err
+		return false, "", err
 	}
 	if err != nil {
-		return true, err  //表示查询过程出现了错误
+		return true, "", err  //表示查询过程出现了错误
 	}
 	defer actOut.Close()
-	return false, nil    //表示查询有结果，邮箱已注册
+	return false, uname, nil    //表示查询有结果，邮箱已注册
 }
 func userRegister(userName string, email string, password string, role int) error {  //old version:register user
 	uid, _ := utils.NewUUID()

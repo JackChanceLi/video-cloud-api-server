@@ -14,8 +14,8 @@ func NewRtmpUrl() (string, error){
 	has := md5.Sum(data)
 	authKey := fmt.Sprintf("%x", has) //将[]byte转成16进制
 	fmt.Println("authKey:" +  authKey)
-	vhost := "default"
-	url := "rtmp://" + IP + PORT + LiveName + streamId + "/?auth_key=" + authKey + "&vhost=" + vhost
+	//vhost := "default"
+	url := "rtmp://" + IP + PORT + LiveName + streamId + "/?auth_key=" + authKey// + "&vhost=" + vhost
 	return url, nil
 }
 
@@ -33,6 +33,6 @@ func NewHlsUrl() (string, error) {
 
 func NewDisplayUrl() (string, error) {
 	channelId, _ := utils.NewStreamID()
-	url := "http://" + Host + ":80/live/player/?channel_id=" + channelId
+	url := "http://" + Host + ":8082/live/player/?channel_id=" + channelId
 	return url, nil
 }

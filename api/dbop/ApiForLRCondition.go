@@ -78,16 +78,17 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 
 		} else if conditionType == 2 { //此种观看条件为白名单观看
 			if email != "" {
-				if ok, err := IsEmailRegister(email); !(!ok && err == nil) { //表示邮箱未注册的情况
+				ok, uname, err := IsEmailRegister(email);
+				if  !(!ok && err == nil) { //表示邮箱未注册的情况
 					log.Printf("邮箱未注册")
 					return nil, sql.ErrNoRows
 				}
-				stmtIns, err := dbConn.Prepare("INSERT INTO whitelist(lid, email) VALUES (?, ?)")
+				stmtIns, err := dbConn.Prepare("INSERT INTO whitelist(lid, email, uname) VALUES (?, ?, ?)")
 				if err != nil {
 					log.Printf("Error of preparation of insert whitelist:%v", err)
 					return nil,err
 				}
-				_, err = stmtIns.Exec(lid, email)
+				_, err = stmtIns.Exec(lid, email, uname)
 				if err != nil {
 					log.Printf("Error of insertion whitelist:%v", err)
 					return nil, err
@@ -114,7 +115,7 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 				return roomCondition, nil
 			}
 		} else { //表示观看方式为验证码观看
-			var newCode string
+		    var newCode string
 			if verificationCode == "" {
 				code,_ := utils.NewStreamID()
 				newCode = string(code[0:6])
@@ -142,24 +143,25 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 	return nil, nil
 }
 
-func RetrieveWhitelistByLid(lid string)(string, error) {
+func RetrieveWhitelistByLid(lid string)([]string, error) {
 	stmtOut, err := dbConn.Prepare("SELECT email FROM whitelist WHERE lid = ?")
 	if err != nil {
 		log.Printf("Error of retrieve whitelist by lid:%v", err)
-		return "", nil
+		return nil, nil
 	}
 	rows, err := stmtOut.Query(lid)
 	if err != nil {
 		log.Printf("%s", err)
-		return "", err
+		return nil, err
 	}
-	var email, emailList string
+	var email string
+	var emailList []string
 	for rows.Next() {
 		if er := rows.Scan(&email); er != nil {
 			log.Printf("Retrieve whitelist error: %s", er)
-			return "", er
+			return nil, er
 		}
-		emailList += email + ";"
+		emailList = append(emailList, email)
 	}
 	return emailList, nil
 }
@@ -171,7 +173,8 @@ func RetrieveLRConditionByLid(lid string)(*defs.LiveRoomCondition, error) {
 	}
 	var condition, conditionType, tryToSee, duration int
 	var price float32
-	var verificationCode, emailList string
+	var verificationCode string
+	var emailList []string
 	err = stmtOut.QueryRow(lid).Scan(&condition, &conditionType, &price, &duration, &tryToSee, &verificationCode)
 	if err != nil && err != sql.ErrNoRows {
 		log.Printf("%s", err)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
@@ -30,6 +31,10 @@ func UpdateLRCondition(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 
     condition, err := dbop.UpdateLRConditionByLid(ubody.Lid, ubody.VerificationCode, ubody.Email, ubody.Condition,
     	                  ubody.ConditionType, ubody.Duration, ubody.TryToSee, ubody.Price)
+    if condition == nil && err == sql.ErrNoRows {
+    	sendErrorResponse(w, defs.ErrorEmailNotRegistered)
+		return
+	}
     if err != nil {
     	sendErrorResponse(w, defs.ErrorDBError)
 		return
