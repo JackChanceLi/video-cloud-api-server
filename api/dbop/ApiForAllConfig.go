@@ -76,23 +76,14 @@ func GetAllConfigByLid(lid string) (*defs.LiveRoomAllConfig, error) {
     roomAllConfig.LampType = roomSafe.LampType
 
     //获取权限安全信息
-    roomWhiteList, err := RetrieveLRAuthSafeWhiteList(lid)
+    roomList, err := RetrieveLRAuthSafeList(lid)
 	if err != nil {
 		fmt.Printf("Error of retrieve liveroom_auth_whitelist:%v", err)
 		return nil, err
 	}
-    for i:= 0; i < len(roomWhiteList); i++ {
-    	roomAllConfig.WhiteSiteList += roomWhiteList[i].Website + ";"
-	}
+    roomAllConfig.WhiteSiteList = roomList.WhiteSiteList
+	roomAllConfig.BlackSiteList = roomList.BlackSiteList
 
-	roomBlackList, err := RetrieveLRAuthSafeBlackList(lid)
-	if err != nil {
-		fmt.Printf("Error of retrieve liveroom_auth_blacklist:%v", err)
-		return nil, err
-	}
-	for i:= 0; i < len(roomBlackList); i++ {
-		roomAllConfig.BlackSiteList += roomBlackList[i].Website + ";"
-	}
 
 	//获取基本信息
 	roomInfo, err := RetrieveLiveRoomByLid(lid)

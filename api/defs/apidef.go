@@ -168,20 +168,14 @@ type LiveRoomAuthSafe struct {
 	Msg Message `json:"msg"`
 }
 
-type LiveRoomAuthSafeList struct {
-	Code int `json:"code"`
-	Data [] LiveRoomAuthSafeIdentity `json:"data"`
-	Msg Message `json:"msg"`
-}
-
 type DataForLiveRoomAuthSafe struct {
 	LiveRoomAuthSafeInfo LiveRoomAuthSafeIdentity `json:"live_room_config_info"`
 }
 
-type LiveRoomAuthSafeIdentity struct {
+type LiveRoomAuthSafeIdentity struct{
 	Lid string `json:"lid"`
-	Website string `json:"website"`
-	Wtype int `json:"wtype"`
+	WhiteSiteList string `json:"white_site_list"`
+	BlackSiteList string `json:"black_site_list"`
 }
 
 //版本安全设置

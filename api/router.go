@@ -43,8 +43,7 @@ func handler () *httprouter.Router {
 	//权限安全设置管理
 	router.POST("/com/:cid/liveroom/auth_safe/", InsertLRAuthSafe)
 	router.PUT("/com/:cid/liveroom/auth_safe/", UpdateLRAuthSafe)
-	router.GET("/com/:cid/liveroom/auth_safe_black/", GetLRAuthSafeBlackListByLid)
-	router.GET("/com/:cid/liveroom/auth_safe_white/", GetLRAuthSafeWhiteListByLid)
+	router.GET("/com/:cid/liveroom/auth_safe/", GetLRAuthSafeByLid)
 	//获取全部权限信息
 	router.GET("/com/:cid/liveroom/all_config", GetLiveRoomAllConfig)
 	//获取直播间配置信息
