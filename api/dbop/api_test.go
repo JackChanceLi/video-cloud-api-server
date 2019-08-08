@@ -26,7 +26,7 @@ func TestUserWorkFlow(t *testing.T) {
 	t.Run("latest_register",testNewUserRegister)
 	t.Run("insert", testCreateLiveRoom)
 	t.Run("delete", testDeleteLiveRoom)
-	t.Run("update", testUpdateLiveRoom)
+	//t.Run("update", testUpdateLiveRoom)
 	t.Run("retrieve", testRetrieveLiveRoomByCid)
 }
 
@@ -87,21 +87,21 @@ func testDeleteLiveRoom(t *testing.T) {
 	}
 }
 
-func testUpdateLiveRoom(t *testing.T) {
-	nlid := "7a988d51-6712-4898-975cfe6f-6aff85dc"
-	nname := "zjn"
-	nkind := 1
-	nsize := 300
-	nstart_time := "2019-07-26 10:10:08"
-	nend_time := "2019-07-26 12:18:35"
-	npermission := "ALL"
-	err := UpdateLiveRoom(nlid, nname, nkind, nsize, nstart_time, nend_time, npermission)
-	if err != nil {
-		t.Errorf("Update live_room failed\nerr:%v", err)
-	} else {
-		t.Log("Update live_room success")
-	}
-}
+//func testUpdateLiveRoom(t *testing.T) {
+//	nlid := "7a988d51-6712-4898-975cfe6f-6aff85dc"
+//	nname := "zjn"
+//	nkind := 1
+//	nsize := 300
+//	nstart_time := "2019-07-26 10:10:08"
+//	nend_time := "2019-07-26 12:18:35"
+//	npermission := "ALL"
+//	err := UpdateLiveRoom(nlid, nname, nkind, nsize, nstart_time, nend_time, npermission)
+//	if err != nil {
+//		t.Errorf("Update live_room failed\nerr:%v", err)
+//	} else {
+//		t.Log("Update live_room success")
+//	}
+//}
 
 func testRetrieveLiveRoomByCid(t *testing.T) {
 	//Lri := &defs.LiveRoomIdentity{}

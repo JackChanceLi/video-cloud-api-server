@@ -127,9 +127,8 @@ func DeleteResourse(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	au := r.URL.Query()
 	aid := au.Get("aid")//获取aid
 	rid := au.Get("rid")//获取rid
-	log.Printf("Aid value is [%s]\n", aid)
-	log.Printf("Lid value is [%s]\n", rid)
-
+	log.Printf("Aid value is [%v]\n", aid)
+	log.Printf("Rid value is [%v]\n", rid)
 	err := dbop.DeleteResourse(rid)
 	if err != nil {
 		sendErrorResponse(w, defs.ErrorDBError)
