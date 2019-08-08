@@ -71,7 +71,11 @@ func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime 
 		return nil, err
 	}
 	//为直播间设定观看条件设置
-
+	_, err = InsertLRConditionByCom(lid, "", 0, 1, 1, 1, 0)
+	if err != nil {
+		log.Printf("Error of liverom_condition default setting:%v", err)
+		return nil, err
+	}
 	//为直播间设定服务设置
 	_, err = InsertLRQualityByCom(lid, defaultConfig.Delay, defaultConfig.Transcode, defaultConfig.TranscodeType, defaultConfig.Record,
 	                     defaultConfig.RecordType)
