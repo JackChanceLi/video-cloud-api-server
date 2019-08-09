@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
@@ -18,6 +19,7 @@ func NewMiddleWareHandler(r *httprouter.Router) http.Handler {
 
 func (m middleWareHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "OPTIONS" {
+		fmt.Println(r.URL.Path)
 		NormalHandler(w, r)
 		return
 	}

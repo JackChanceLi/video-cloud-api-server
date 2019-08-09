@@ -19,8 +19,6 @@ func InsertLRConfigByCom(lid string, live_pic string, danmu int, chat int, share
 		return nil, err
 	}
 
-	log.Printf(" Insert success")
-
 	defer stmtIns.Close()
 
 	LRCon := &defs.LiveRoomConfigIdentity{}
@@ -49,8 +47,6 @@ func UpdateLRConfig(lid string, live_pic string, danmu int, chat int, share int,
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf(" Update success")
 
 	defer stmtUpa.Close()
 

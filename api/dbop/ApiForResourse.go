@@ -27,8 +27,6 @@ func UploadResourseByCom(aid string, cid string, name string, rtype string, size
 		return nil, err
 	}
 
-	log.Printf(" Insert success")
-
 	defer stmtIns.Close()
 	res := &defs.ResourseIdentity{}
 	res.Rid = rid
@@ -55,8 +53,6 @@ func DeleteResourse(rid string) error {
 	if _, err := stmtOut.Query(rid); err != nil {
 		return err
 	}
-
-	log.Printf(" Delete success")
 
 	defer stmtOut.Close()
 	return nil

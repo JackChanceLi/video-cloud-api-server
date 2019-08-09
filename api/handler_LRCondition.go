@@ -41,6 +41,7 @@ func UpdateLRCondition(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	}
     roomCondition := &defs.DataForCondition{}
     roomCondition.Code = 200
+    fmt.Println(condition.WhiteUserList)
     roomCondition.Data.Lid = condition.Lid
     roomCondition.Data.Condition = condition.Condition
     roomCondition.Data.ConditionType = condition.ConditionType

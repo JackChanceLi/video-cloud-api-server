@@ -25,8 +25,6 @@ func InsertLRQualityByCom(lid string, delay int, transcode int, transcode_type [
 		return nil, err
 	}
 
-	log.Printf(" Insert success")
-
 	defer stmtIns.Close()
 	LRQua := &defs.LiveRoomQualityIdentity{}
 	LRQua.Lid = lid
@@ -54,8 +52,6 @@ func UpdateLRQuality(lid string, delay int, transcode int, transcode_type []int,
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf(" Update success")
 
 	defer stmtUpa.Close()
 

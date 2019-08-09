@@ -2,6 +2,7 @@ package dbop
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"go-api-server/api/defs"
 	"go-api-server/api/utils"
@@ -38,6 +39,10 @@ func InsertLRConditionByCom(lid, verificationCode string, condition ,conditionTy
 
 func UpdateLRConditionByLid(lid, verificationCode, email string, condition, conditionType, duration, tryToSee int, price float32) (*defs.LiveRoomCondition, error) {
 	Condition := defs.LiveRoomDefaultConfig
+	err := DeleteWhiteUserList(lid)
+	if err != nil {
+		return nil, err
+	}
 	if condition == 1 { //表示此时观看条件为无条件观看
 		stmtUpa, err := dbConn.Prepare("UPDATE live_condition SET lcondition = ?, condition_type = ?, price = ?, duration = ?, try_to_see = ?, verification_code = ? WHERE lid = ?")
 		if err != nil {
@@ -111,6 +116,7 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 				roomCondition := &defs.LiveRoomCondition{}
 				roomCondition.ConditionType = 2
 				roomCondition.Condition = 0
+				fmt.Println(emailList)
 				roomCondition.WhiteUserList = emailList
 				return roomCondition, nil
 			}
@@ -143,8 +149,8 @@ func UpdateLRConditionByLid(lid, verificationCode, email string, condition, cond
 	return nil, nil
 }
 
-func RetrieveWhitelistByLid(lid string)([]string, error) {
-	stmtOut, err := dbConn.Prepare("SELECT email FROM whitelist WHERE lid = ?")
+func RetrieveWhitelistByLid(lid string)([]defs.UserList, error) {
+	stmtOut, err := dbConn.Prepare("SELECT email, uname FROM whitelist WHERE lid = ?")
 	if err != nil {
 		log.Printf("Error of retrieve whitelist by lid:%v", err)
 		return nil, nil
@@ -154,15 +160,19 @@ func RetrieveWhitelistByLid(lid string)([]string, error) {
 		log.Printf("%s", err)
 		return nil, err
 	}
-	var email string
-	var emailList []string
+	var email, uname string
+	var emailList []defs.UserList
 	for rows.Next() {
-		if er := rows.Scan(&email); er != nil {
+		user := defs.UserList{}
+		if er := rows.Scan(&email, &uname); er != nil {
 			log.Printf("Retrieve whitelist error: %s", er)
 			return nil, er
 		}
-		emailList = append(emailList, email)
+		user.Email = email
+		user.Uname = uname
+		emailList = append(emailList, user)
 	}
+	fmt.Println(emailList)
 	return emailList, nil
 }
 func RetrieveLRConditionByLid(lid string)(*defs.LiveRoomCondition, error) {
@@ -174,13 +184,13 @@ func RetrieveLRConditionByLid(lid string)(*defs.LiveRoomCondition, error) {
 	var condition, conditionType, tryToSee, duration int
 	var price float32
 	var verificationCode string
-	var emailList []string
+	var emailList []defs.UserList
 	err = stmtOut.QueryRow(lid).Scan(&condition, &conditionType, &price, &duration, &tryToSee, &verificationCode)
 	if err != nil && err != sql.ErrNoRows {
 		log.Printf("%s", err)
 		return nil, err
 	}
-	if conditionType == 2 && condition == 1 {
+	if conditionType == 2 && condition == 0 { //condition为0表示有条件观看
 		emailList,_ = RetrieveWhitelistByLid(lid)
 	}
 	roomCondition := &defs.LiveRoomCondition{}
@@ -194,6 +204,17 @@ func RetrieveLRConditionByLid(lid string)(*defs.LiveRoomCondition, error) {
 	roomCondition.Lid = lid
 
 	return  roomCondition, nil
-
 }
 
+func DeleteWhiteUserList(lid string) error {
+	stmtDel, err := dbConn.Prepare("DELETE FROM whitelist WHERE lid = ?")
+	if err != nil {
+		log.Printf("Error of pareparation of delete white_user_list:%v", err)
+		return  err
+	}
+	if _, err := stmtDel.Query(lid); err != nil {
+		return err
+	}
+	defer stmtDel.Close()
+	return nil
+}

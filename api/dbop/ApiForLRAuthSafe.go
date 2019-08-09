@@ -58,15 +58,9 @@ func RetrieveLRAuthSafeList(Lid string) (* defs.LiveRoomAuthSafeIdentity, error)
 		return nil, err
 	}
 	//cid := Cid
-	row, err := stmtOut.Query(Lid)
-	if err != nil {
-		log.Printf("%s", err)
-		return nil, err
-	}
-
 	var white_site_list, black_site_list string
-	if er := row.Scan(&white_site_list, &black_site_list); er != nil {
-		log.Printf("Retrieve live_auth_safe error: %s", er)
+	stmtOut.QueryRow(Lid).Scan(&white_site_list, &black_site_list)
+	if err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
 
