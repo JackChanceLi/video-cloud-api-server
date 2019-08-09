@@ -109,8 +109,6 @@ func DeleteLiveRoom(lid string) error {
 		return err
 	}
 
-	log.Printf(" Delete success")
-
 	defer stmtOut.Close()
 	return nil
 }
@@ -126,8 +124,6 @@ func UpdateLiveRoom(lid string, name string, kind int, size int, startTime strin
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf(" Update success")
 
 	defer stmtUpa.Close()
 	Lr, err := RetrieveLiveRoomByLid(lid)

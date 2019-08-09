@@ -122,8 +122,6 @@ func UpdateSession(ttl int64,  uid string) error {  //更新session
 		return err
 	}
 
-	log.Printf(" Update success")
-
 	defer stmtUpa.Close()
 	return nil
 }

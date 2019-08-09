@@ -3,10 +3,12 @@ package dbop
 import (
 	"fmt"
 	"go-api-server/api/defs"
+	"log"
 )
 
 func GetAllConfigByLid(lid string) (*defs.LiveRoomAllConfig, error) {
 	//获取预约界面信息
+	log.Println("lid" + lid)
 	roomIntro, err := RetrieveLRIntroByLid(lid)
 	if err != nil {
 		fmt.Printf("Error of retrieve liveroom_intro:%v", err)

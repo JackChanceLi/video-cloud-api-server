@@ -19,8 +19,6 @@ func InsertLRSafeByCom(lid string, logo int, logo_url string, logo_position int,
 		return nil, err
 	}
 
-	log.Printf(" Insert success")
-
 	defer stmtIns.Close()
 	LRSf := &defs.LiveRoomSafeIdentity{}
 	LRSf.Lid = lid
@@ -48,8 +46,6 @@ func UpdateLRSafe(lid string, logo int, logo_url string, logo_position int, logo
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf(" Update success")
 
 	defer stmtUpa.Close()
 	LRSf := &defs.LiveRoomSafeIdentity{}

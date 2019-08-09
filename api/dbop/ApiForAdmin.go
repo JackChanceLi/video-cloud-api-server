@@ -17,8 +17,6 @@ func InsertAdmin(aid string, cid string, uname string, password string, register
 		return err
 	}
 
-	log.Printf(" Insert success")
-
 	defer stmtIns.Close()
 	return  nil
 }
@@ -33,8 +31,6 @@ func DeleteAdmin(aid string) error {
 	if _, err := stmtOut.Query(aid); err != nil {
 		return err
 	}
-
-	log.Printf(" Delete success")
 
 	defer stmtOut.Close()
 	return nil
@@ -51,8 +47,6 @@ func UpdateAdmin(aid string, uname string, password string, email string, auth s
 	if err != nil {
 		return err
 	}
-
-	log.Printf(" Update success")
 
 	defer stmtUpa.Close()
 	return nil

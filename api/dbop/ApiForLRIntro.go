@@ -19,8 +19,6 @@ func InsertLRIntroByCom(lid string, qorder int, pre_pic string) (*defs.LiveRoomI
 		return nil, err
 	}
 
-	log.Printf(" Insert success")
-
 	defer stmtIns.Close()
 	LRIn := &defs.LiveRoomIntroIdentity{}
 	LRIn.Lid = lid
@@ -41,8 +39,6 @@ func UpdateLRIntro(lid string, qorder int, pre_pic string) (*defs.LiveRoomIntroI
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf(" Update success")
 
 	defer stmtUpa.Close()
 
