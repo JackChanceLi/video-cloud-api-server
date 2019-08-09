@@ -48,6 +48,7 @@ func handler () *httprouter.Router {
 	router.GET("/com/:cid/liveroom/all_config/", GetLiveRoomAllConfig)
 	//获取直播间配置信息
 	router.GET("/channel/info/", GetLiveRoomAllConfig)
-
+	//获取token
+	router.GET("/sts/token", GetToken)
 	return router
 }

@@ -111,15 +111,6 @@ type ResourseIdentity struct {
 	PicUrl string `json:"pic_url"`
 }
 
-//从OSS获取token
-type Token struct {
-	StatusCode string `json:"status_code"`
-	AccessKeyId string `json:"access_key_id"`
-	AccessKeySecret string `json:"access_key_secret"`
-	SecurityToken string  `json:"security_token"`
-	Expiration string `json:"expiration"`
-}
-
 //引导界面信息
 type LiveRoomIntro struct {
 	Code  int `json:"code"`
