@@ -60,20 +60,3 @@ func testUserRegister(t *testing.T) {
 func testUserLogin(t *testing.T) {
 	fmt.Println("Login success")
 }
-func testRecieveToken(t *testing.T) {
-	url := "http://114.116.180.115:9002/ljczjnjyl"
-	//contentType := "application/json;charset=utf-8"
-	resp, err := http.Get(url)
-	if err != nil {
-		t.Errorf("Get failed:%v", err)
-		return
-	}
-	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		t.Errorf("Read failed:%v", err)
-		return
-	}
-	fmt.Println( resp.Body)
-	fmt.Println("content:", string(content))
-}

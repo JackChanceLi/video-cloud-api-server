@@ -75,3 +75,4 @@ type DataForAllConfig struct {
 	Msg Message `json:"msg"`
 }
 
+

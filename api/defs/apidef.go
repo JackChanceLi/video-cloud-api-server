@@ -111,6 +111,7 @@ type ResourseIdentity struct {
 	PicUrl string `json:"pic_url"`
 }
 
+
 //引导界面信息
 type LiveRoomIntro struct {
 	Code  int `json:"code"`
