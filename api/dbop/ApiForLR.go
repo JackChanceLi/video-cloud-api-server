@@ -23,11 +23,12 @@ func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime 
 	}
 
 	lid, _ := utils.NewUUID()
-	pushUrl,_ := url.NewRtmpUrl()
-	pullHlsUrl,_ := url.NewHlsUrl()
-	pullRtmpUrl,_ := url.NewRtmpUrl()
-	pullHttpFlvUrl,_ := url.NewFlvUrl()
-	displayUrl,_ := url.NewDisplayUrl()
+	streamId, _ := utils.NewStreamID()
+	pushUrl,_ := url.NewRtmpUrl(streamId)
+	pullHlsUrl,_ := url.NewHlsUrl(streamId)
+	pullRtmpUrl := pushUrl
+	pullHttpFlvUrl,_ := url.NewFlvUrl(streamId)
+	displayUrl,_ := url.NewDisplayUrl(lid)
 
 	_,err = stmtIns.Exec(lid, cid, name, kind, size, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, status, permission, createTime, pictureUrl)
 	if err != nil {
@@ -213,11 +214,12 @@ func CreateLiveRoomByAdmin (cid, aid, name, startTime, endTime string, kind, siz
 	}
 
 	lid, _ := utils.NewUUID()
-	pushUrl,_ := url.NewRtmpUrl()
-	pullHlsUrl,_ := url.NewHlsUrl()
-	pullRtmpUrl,_ := url.NewRtmpUrl()
-	pullHttpFlvUrl,_ := url.NewFlvUrl()
-	displayUrl,_ := url.NewDisplayUrl()
+	streamId, _ := utils.NewStreamID()
+	pushUrl,_ := url.NewRtmpUrl(streamId)
+	pullHlsUrl,_ := url.NewHlsUrl(streamId)
+	pullRtmpUrl := pushUrl
+	pullHttpFlvUrl,_ := url.NewFlvUrl(streamId)
+	displayUrl,_ := url.NewDisplayUrl(lid)
 
 	_,err = stmtIns.Exec(lid, cid, name, kind, size, startTime, endTime, pushUrl, pullHlsUrl, pullRtmpUrl, pullHttpFlvUrl, displayUrl, status, permission, createTime)
 	if err != nil {

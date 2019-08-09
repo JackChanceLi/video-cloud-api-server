@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"go-api-server/api/utils"
 )
-func NewRtmpUrl() (string, error){
-	streamId, _ := utils.NewStreamID()
+func NewRtmpUrl(streamId string) (string, error){
 	key := utils.NewID()
 	//将key和stream_id进行MD5加密
 	str := key + streamId
@@ -19,20 +18,17 @@ func NewRtmpUrl() (string, error){
 	return url, nil
 }
 
-func NewFlvUrl() (string, error) {
-	streamId, _ := utils.NewStreamID()
+func NewFlvUrl(streamId string) (string, error) {
 	url := "http://" + Host + ":8090/" + "live/" + streamId + ".flv"
 	return url, nil
 }
 
-func NewHlsUrl() (string, error) {
-	streamId, _ := utils.NewStreamID()
+func NewHlsUrl(streamId string) (string, error) {
 	url := "http://" + Host + ":8090/" + LiveName +streamId + ".m3u8"
 	return url, nil
 }
 
-func NewDisplayUrl() (string, error) {
-	channelId, _ := utils.NewStreamID()
-	url := "http://" + Host + ":8082/live/player/?channel_id=" + channelId
+func NewDisplayUrl(channelID string) (string, error) {
+	url := "http://" + DisplayHost + ":8082/live/player/?channel_id=" + channelID
 	return url, nil
 }
