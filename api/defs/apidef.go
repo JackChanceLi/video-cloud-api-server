@@ -214,6 +214,41 @@ type LiveRoomQualityIdentity struct {
 	RecordType int `json:"record_type"`
 }
 
+//子管理员信息
+type Admin struct {
+	Code  int `json:"code"`
+	Data  DataForAdmin `json:"data"`
+	Msg Message `json:"msg"`
+}
+
+type DataForAdmin struct {
+	AdminInfo AdminIdentity `json:"admin_info"`
+}
+
+type AdminIdentity struct {
+	Aid string `json:"aid"`
+	Cid string `json:"cid"`
+	Uname string `json:"uname"`
+	Password string `json:"password"`
+	RegisterDate string `json:"register_date"`
+	Email string `json:"email"`
+	Auth []string `json:"auth"`
+	AvtarUrl string `json:"avtar_url"`
+	Descp string `json:"descp"`
+}
+
+//收到的admin信息
+type ResAdminIdentity struct {
+	Aid string `json:"aid"`
+	Cid string `json:"cid"`
+	Uname string `json:"uname"`
+	Password string `json:"password"`
+	RegisterDate string `json:"register_date"`
+	Email string `json:"email"`
+	Auth string `json:"auth"`
+	AvtarUrl string `json:"avtar_url"`
+	Descp string `json:"descp"`
+}
 
 
 var (

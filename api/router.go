@@ -50,5 +50,10 @@ func handler () *httprouter.Router {
 	router.GET("/channel/info/", GetLiveRoomAllConfig)
 	//获取token
 	router.GET("/sts/token", GetToken)
+	//多账户管理
+	router.POST("/com/:cid/admin/", InsertAdmin)
+	router.PUT("/com/:cid/admin/", UpdateAdmin)
+	router.GET("/com/:cid/admin/", GetAdminByAid)
+	router.DELETE("/com/:cid/admin/", DeleteAdmin)
 	return router
 }
