@@ -95,7 +95,11 @@ func CreateLiveRoomByCom(cid string, name string, kind int, size int, startTime 
 		return nil, err
 	}
 	//为直播间设定权限安全设置，默认黑白名单均为空，无需处理
-
+	_, err = InsertLRAuthSafeList(lid, defaultConfig.WhiteSiteList, defaultConfig.BlackSiteList)
+	if err != nil {
+		log.Printf("Error of liverom_auth_safe default setting:%v", err)
+		return nil, err
+	}
 	return  room, nil
 }
 

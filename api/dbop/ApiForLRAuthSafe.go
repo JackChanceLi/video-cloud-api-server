@@ -20,9 +20,6 @@ func UpdateLRAuthSafe(lid string, WhiteSiteList string, BlackSiteList string) (*
 		log.Printf("%s",err)
 		return nil, err
 	}
-
-	log.Printf(" Update success")
-
 	defer stmtUpa.Close()
 
 	LRAS := &defs.LiveRoomAuthSafeIdentity{}
@@ -66,4 +63,25 @@ func RetrieveLRAuthSafeList(Lid string) (* defs.LiveRoomAuthSafeIdentity, error)
 
 	LRAS := &defs.LiveRoomAuthSafeIdentity{Lid: Lid, WhiteSiteList: white_site_list, BlackSiteList: black_site_list}
 	return LRAS, nil
+}
+
+func InsertLRAuthSafeList(Lid, WhiteSiteList, BlackSiteList string) (*defs.LiveRoomAuthSafeIdentity, error) {
+	stmtIns, err := dbConn.Prepare("INSERT INTO live_auth_safe (lid, white_site_list, black_site_list) VALUES (?, ?, ?)")
+	if err != nil {
+		log.Printf("pareparation:%v", err)
+		return nil, err
+	}
+
+	_, err = stmtIns.Exec(Lid, WhiteSiteList, BlackSiteList)
+	if err != nil {
+		return nil, err
+	}
+	defer stmtIns.Close()
+
+	authSafe := &defs.LiveRoomAuthSafeIdentity{}
+	authSafe.Lid = Lid
+	authSafe.WhiteSiteList = WhiteSiteList
+	authSafe.BlackSiteList = BlackSiteList
+
+	return  authSafe, nil
 }
