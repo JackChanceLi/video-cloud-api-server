@@ -10,6 +10,9 @@ func handler () *httprouter.Router {
 	//普通用户管理
 	router.POST("/user/register", Register)
 	router.POST("/user/login",LoginByMail)
+	//用户信息管理
+	router.GET("/user/:aid/info/", GetUserInfo)
+	router.PUT("/user/:aid/info/",UpdateUserInfo)
 	//直播间管理
 	router.POST("/com/:cid/liverooms/", CreateLiveRoom)
 	router.PUT("/com/:cid/liverooms/", UpdateLiveRoom)

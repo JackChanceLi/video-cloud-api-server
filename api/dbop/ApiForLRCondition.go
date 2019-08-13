@@ -21,8 +21,6 @@ func InsertLRConditionByCom(lid, verificationCode string, condition ,conditionTy
 		return nil, err
 	}
 
-	log.Printf(" Insert success")
-
 	defer stmtIns.Close()
 
 	LRCON := &defs.LiveRoomCondition{}

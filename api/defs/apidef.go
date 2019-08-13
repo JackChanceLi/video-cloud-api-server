@@ -1,31 +1,10 @@
 package defs
 
-
 type UserIdentity struct {
 	UserName string `json:"user_name"` //注册用户名
 	Password   string `json:"password"` //注册用户的密码
 	Email    string `json: "email"` //注册用户的邮箱
 	//Role    int  `json:"role"`  //表示用户权限，1为管理员，2位普通用户
-}
-
-type DataForUser struct {
-	SessionID string `json:"session_id"`
-	User UserInformation `json:"user"`
-}
-
-
-
-type UserInformation struct {
-	Aid string `json:"aid"`
-	Cid string `json:"cid"`
-	Name string `json:"name"`
-	Email string `json:"email"`
-	Auth string `json:"auth"`
-}
-
-type Message struct {
-	Error string `json:"name"`
-	ErrorCode string `json:"error_code"`
 }
 
 type SignedUp struct{
@@ -34,6 +13,35 @@ type SignedUp struct{
 	Msg Message `json:"msg"`
 }
 
+type DataForUser struct {
+	SessionID string `json:"session_id"`
+	User UserInformation `json:"user"`
+}
+
+type UserInformation struct {
+	Aid string `json:"aid"`
+	Cid string `json:"cid"`
+	Name string `json:"name"`
+	Email string `json:"email"`
+	Auth string `json:"auth"`
+	AvtarUrl string `json:"avtar_url"`
+}
+
+type Message struct {
+	Error string `json:"name"`
+	ErrorCode string `json:"error_code"`
+}
+type UserInfo struct {
+	Code int `json:"code"`
+	Data UserData `json:"data"`
+}
+type UserData struct {
+	Name string `json:"name"`
+	Email string `json:"email"`
+	Auth []string `json:"auth"`
+	AvtarUrl string `json:"avtar_url"`
+	Desc string `json:"desc"`
+}
 
 type Register struct {
 	Success bool `json:"success"`
